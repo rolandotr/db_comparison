@@ -1,0 +1,4 @@
+- The parameter $\ell$ is not defined in MAD protocol. However, $\ell$ it is used to compute the number of bits exchanged.
+- The distance fraud analysis of Bussard and Bagga is not complete. Apparently is (1/2)^a, however, the expected value of a has not been found. The number of exchanged bits is not clear neither.
+- The distance fraud analysis of SKI is also incomplete. There exist values for some configuration, but not for allo of them. I will use HK as the upper bound. A similar problem with mafia fraud, in this case I choose q = 2 as suggested in the survey.
+- 
