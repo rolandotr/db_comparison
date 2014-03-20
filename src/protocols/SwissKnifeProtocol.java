@@ -40,5 +40,17 @@ public class SwissKnifeProtocol extends DBProtocol{
 	public int getTotalBitsExchanged(int n) {
 		return (sizeOfSecret+sizeOfNonces)*2+n;
 	}
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+3*n+2*sizeOfSecret;
+	}
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 2;
+	}
 
 }

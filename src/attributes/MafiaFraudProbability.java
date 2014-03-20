@@ -6,4 +6,8 @@ public class MafiaFraudProbability extends DoubleAttribute{
 		super(value);
 	}
 
+	@Override
+	public MafiaFraudProbability getInstance() {
+		return new MafiaFraudProbability(-1);
+	}
 }

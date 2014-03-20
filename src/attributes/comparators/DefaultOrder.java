@@ -4,6 +4,12 @@ import attributes.Attribute;
 import attributes.BooleanAttribute;
 import attributes.DoubleAttribute;
 
+/*Trujillo- Mar 17, 2014
+ * In this class we basically say that: i) in case of numerical attributes the 
+ * lower the better (true for memory, attack success probability and number of crypto calls) 
+ * ii) in case of a boolean attribute false is better than true (true for presence of
+ * second slow phase, more than one bit exchange). 
+ * Note that, this is very simplistic. Others kind of relationships might be defined, though.*/
 public class DefaultOrder<T> implements OrderRelationship<Attribute>{
 
 	@Override

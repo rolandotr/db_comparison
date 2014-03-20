@@ -34,4 +34,19 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 		throw new RuntimeException("to do");
 	}
 
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+2*n;
+	}
+
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 4;
+	}
+
 }

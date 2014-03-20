@@ -6,4 +6,9 @@ public class TerroristFraudProbability extends DoubleAttribute{
 		super(value);
 	}
 
+
+	@Override
+	public TerroristFraudProbability getInstance() {
+		return new TerroristFraudProbability(-1);
+	}
 }

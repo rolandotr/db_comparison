@@ -8,7 +8,7 @@ public class TreeBasedProtocol extends DBProtocol{
 	
 	
 	/*Trujillo- Mar 7, 2014
-	 * This value define the number of trees. When depth = 0, a single tree
+	 * This value define the depth of the trees. When depth = 0, a single tree
 	 * is assumed. Otherwise, n/depth trees are considered*/
 	private int depth;
 	
@@ -59,6 +59,24 @@ public class TreeBasedProtocol extends DBProtocol{
 	@Override
 	public int getTotalBitsExchanged(int n) {
 		return 2*sizeOfNonces;
+	}
+
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+
+	@Override
+	public int getMemory(int n) {
+		if (depth == 0)
+			return getTotalBitsExchanged(n)+(int)Math.pow(2, n+1)-2;
+		else return getTotalBitsExchanged(n)+(n/depth)*((int)Math.pow(2, depth+1)-2);
+
+	}
+
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 1;
 	}
 
 }

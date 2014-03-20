@@ -5,9 +5,11 @@ import java.math.BigDecimal;
 public class RasmussenAndCapckunProtocol extends DBProtocol{
 
 	private int sizeOfSignature;
+	private int maxSizeOfNonce;
 	
-	public RasmussenAndCapckunProtocol(int sizeOfSignature){
+	public RasmussenAndCapckunProtocol(int sizeOfSignature, int maxSizeOfNonce){
 		this.sizeOfSignature = sizeOfSignature;
+		this.maxSizeOfNonce = maxSizeOfNonce;
 	}
 	
 	@Override
@@ -47,6 +49,21 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 	@Override
 	public int getTotalBitsExchanged(int n) {
 		return sizeOfSignature;
+	}
+
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return true;
+	}
+
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+maxSizeOfNonce*2;
+	}
+
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 3;
 	}
 
 }

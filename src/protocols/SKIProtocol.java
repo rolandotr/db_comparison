@@ -60,4 +60,22 @@ public class SKIProtocol extends DBProtocol{
 		return 2*sizeOfNonces+t*n+1;
 	}
 
+	/*Trujillo- Mar 17, 2014
+	 * This protocol is not designed to have a single bit exchange.
+	 * Otherwise it does not resist terrorist fraud.*/
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return true;
+	}
+
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+t*n;
+	}
+
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 1;
+	}
+
 }

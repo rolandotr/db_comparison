@@ -66,4 +66,19 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 		return 2*sizeOfNonces+3*n;
 	}
 
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return true;
+	}
+
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+2*n;
+	}
+
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 1;
+	}
+
 }

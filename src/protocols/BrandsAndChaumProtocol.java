@@ -4,11 +4,12 @@ import java.math.BigDecimal;
 
 public class BrandsAndChaumProtocol extends DBProtocol{
 	
-	private int sizeOfCommitmentAndSignature;
+	private int sizeOfCommit;
 	
-	public BrandsAndChaumProtocol(int sizeOfCommitmentAndSignature) {
-		this.sizeOfCommitmentAndSignature = sizeOfCommitmentAndSignature;
+	public BrandsAndChaumProtocol(int sizeOfCommit) {
+		this.sizeOfCommit = sizeOfCommit;
 	}
+	
 	@Override
 	public String getAcronym() {
 		return "BC";
@@ -35,8 +36,22 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 	}
 
 	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n) + 2*n;
+	}
+	
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 2;
+	}
+
+	@Override
 	public int getTotalBitsExchanged(int n) {
-		return 2*sizeOfCommitmentAndSignature+n;
+		return 2*sizeOfCommit+n;
 	}
 
 }

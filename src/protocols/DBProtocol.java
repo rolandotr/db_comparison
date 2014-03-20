@@ -18,7 +18,16 @@ public abstract class DBProtocol {
 	
 	public abstract boolean hasFinalSlowPhase();
 	
-	public abstract int getTotalBitsExchanged(int n);
+	public abstract boolean hasMultipleBitExchange();
+	
+	/*Trujillo- Mar 17, 2014
+	 * We define memory as the memory required during the slow phase
+	 * that is provided by the method getTotalBitsExchanged plus the 
+	 * number of bits exchanged during the fast phase. Note that, this could be quite
+	 * confusing for some protocols as presented in the sirvey right now.*/
+	public abstract int getMemory(int n);
+	
+	public abstract int getMinimumNumberOfCryptoCalls();
 	
 	/*Trujillo- Mar 7, 2014
 	 * It is unfair to compare protocols with 1-bit vs x-bits of
@@ -27,4 +36,7 @@ public abstract class DBProtocol {
 	public int getFairNumberOfRounds(int n, int size){
 		return n/size;
 	}
+	
+	public abstract int getTotalBitsExchanged(int n);
+
 }

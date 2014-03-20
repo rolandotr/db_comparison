@@ -1,6 +1,6 @@
 package attributes;
 
-public class DoubleAttribute extends Attribute{
+public abstract class DoubleAttribute extends Attribute{
 
 	private double value;
 	
@@ -10,6 +10,10 @@ public class DoubleAttribute extends Attribute{
 	
 	public double getValue(){
 		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
 	}
 	
 }

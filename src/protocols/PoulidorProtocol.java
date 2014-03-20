@@ -88,4 +88,19 @@ public class PoulidorProtocol extends DBProtocol{
 		return 2*sizeOfNonces;
 	}
 
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+4*n;
+	}
+
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 1;
+	}
+
 }

@@ -11,4 +11,9 @@ public class BooleanAttribute extends Attribute{
 	public boolean getValue(){
 		return value;
 	}
+
+	@Override
+	public BooleanAttribute getInstance() {
+		return new BooleanAttribute(false);
+	}
 }

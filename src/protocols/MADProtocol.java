@@ -42,5 +42,18 @@ public class MADProtocol extends DBProtocol{
 	public int getTotalBitsExchanged(int n) {
 		return (sizeOfRandomNumbers+sizeOfTheSecret+outputSizeOfMAC)*2;
 	}
+	
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+2*n;
+	}
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 3;
+	}
 
 }

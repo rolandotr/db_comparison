@@ -38,5 +38,17 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 	public int getTotalBitsExchanged(int n) {
 		return sizeOfNonces*2;
 	}
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+2*n;
+	}
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 1;
+	}
 
 }

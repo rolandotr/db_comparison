@@ -53,4 +53,19 @@ public class KimAndAvoineProtocol extends DBProtocol{
 		return 2*sizeOfNonces;
 	}
 
+	@Override
+	public boolean hasMultipleBitExchange() {
+		return false;
+	}
+
+	@Override
+	public int getMemory(int n) {
+		return getTotalBitsExchanged(n)+2*n;
+	}
+
+	@Override
+	public int getMinimumNumberOfCryptoCalls() {
+		return 1;
+	}
+
 }
