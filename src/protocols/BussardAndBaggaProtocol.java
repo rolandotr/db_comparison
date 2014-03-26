@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 
 public class BussardAndBaggaProtocol extends DBProtocol{
 
+	public BussardAndBaggaProtocol(){
+		
+	}
 	@Override
 	public String getAcronym() {
 		return "DBPK-Log";
@@ -14,9 +17,12 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 		return ONE_OVER_TWO.pow(n);
 	}
 
+	/*Trujillo- Mar 26, 2014
+	 * There is a flaw in the distance fraud computation of this protocol. Therefore, 
+	 * I assume the worst case, i.e. probability is one*/
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
-		return null;
+		return ONE;
 	}
 
 	@Override
@@ -31,7 +37,7 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 
 	@Override
 	public int getTotalBitsExchanged(int n) {
-		throw new RuntimeException("to do");
+		return 2*n+SIZE_OF_COMMIT;
 	}
 
 	@Override
@@ -47,6 +53,15 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
 		return 4;
+	}
+
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new BussardAndBaggaProtocol()};
+	}
+	@Override
+	public String getIdentifier() {
+		return "BB";
 	}
 
 }

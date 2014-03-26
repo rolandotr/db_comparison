@@ -12,6 +12,10 @@ public class KimAndAvoineProtocol extends DBProtocol{
 		this.sizeOfNonces = sizeOfNonces;
 	}
 	
+	public KimAndAvoineProtocol(){
+		this(0, SIZE_OF_NONCES);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "KA2";
@@ -66,6 +70,25 @@ public class KimAndAvoineProtocol extends DBProtocol{
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
 		return 1;
+	}
+
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		double pd = 0;
+		DBProtocol[] result = new DBProtocol[factor+1];
+		for (int i = 0; i <= factor; i++) {
+			/*Trujillo- Mar 24, 2014
+			 * this is computed in that way to avoid numerical error.*/
+			pd = 1 - (factor-i)/(double)factor;
+			result[i] = new KimAndAvoineProtocol(pd, SIZE_OF_NONCES);
+			if (pd > 1) pd = 1;
+		}
+		return result;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "KA_pd_"+pd;
 	}
 
 }

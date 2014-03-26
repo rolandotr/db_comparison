@@ -12,6 +12,10 @@ public class SKIProtocol extends DBProtocol{
 		this.sizeOfNonces = sizeOfNonces;
 	}
 	
+	public SKIProtocol(){
+		this(1, SIZE_OF_NONCES);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "SKI";
@@ -78,4 +82,19 @@ public class SKIProtocol extends DBProtocol{
 		return 1;
 	}
 
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		DBProtocol[] result = new DBProtocol[factor];
+		for (int i = 1; i <= factor; i++) {
+			result[i-1] = new SKIProtocol(i, SIZE_OF_NONCES);
+		}
+		return result;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "SKI_t_"+t;
+	}
+
+	
 }

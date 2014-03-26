@@ -10,6 +10,10 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 		this.sizeOfCommit = sizeOfCommit;
 	}
 	
+	public BrandsAndChaumProtocol() {
+		this(SIZE_OF_COMMIT);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "BC";
@@ -52,6 +56,16 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 	@Override
 	public int getTotalBitsExchanged(int n) {
 		return 2*sizeOfCommit+n;
+	}
+
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new BrandsAndChaumProtocol()};
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "BC";
 	}
 
 }

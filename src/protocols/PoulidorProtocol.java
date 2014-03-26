@@ -14,6 +14,10 @@ public class PoulidorProtocol extends DBProtocol{
 		this.sizeOfNonces = sizeOfNonces;
 	}
 	
+	public PoulidorProtocol(){
+		this(SIZE_OF_NONCES);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "Poulidor";
@@ -101,6 +105,16 @@ public class PoulidorProtocol extends DBProtocol{
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
 		return 1;
+	}
+
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new PoulidorProtocol()};
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "Poulidor";
 	}
 
 }

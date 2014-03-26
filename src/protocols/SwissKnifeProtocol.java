@@ -11,6 +11,10 @@ public class SwissKnifeProtocol extends DBProtocol{
 		this.sizeOfNonces = sizeOfNonces;
 		this.sizeOfSecret = sizeOfSecret;
 	}
+	public SwissKnifeProtocol(){
+		this(SIZE_OF_NONCES, SIZE_OF_SECRET);
+	}
+
 	@Override
 	public String getAcronym() {
 		return "Swiss-knife";
@@ -51,6 +55,14 @@ public class SwissKnifeProtocol extends DBProtocol{
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
 		return 2;
+	}
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new SwissKnifeProtocol()};
+	}
+	@Override
+	public String getIdentifier() {
+		return "SwissKnife";
 	}
 
 }

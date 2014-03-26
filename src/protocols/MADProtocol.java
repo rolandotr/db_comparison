@@ -13,6 +13,11 @@ public class MADProtocol extends DBProtocol{
 		this.outputSizeOfMAC = outputSizeOfMAC;
 		this.sizeOfTheSecret = sizeOfTheSecret;
 	}
+
+	public MADProtocol(){
+		this(SIZE_OF_NONCES, SIZE_OF_MAC, SIZE_OF_SECRET);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "MAD";
@@ -53,7 +58,16 @@ public class MADProtocol extends DBProtocol{
 	}
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
-		return 3;
+		return 4;
+	}
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new MADProtocol(SIZE_OF_NONCES, SIZE_OF_MAC, SIZE_OF_SECRET)};
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "MAD";
 	}
 
 }

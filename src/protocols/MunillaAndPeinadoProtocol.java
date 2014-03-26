@@ -15,6 +15,10 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 		this.sizeOfNonces = sizeOfNonces;
 	}
 	
+	public MunillaAndPeinadoProtocol(){
+		this(0, SIZE_OF_NONCES);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "MP";
@@ -78,7 +82,26 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
-		return 1;
+		return 2;
+	}
+
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		double pf = 0;
+		DBProtocol[] result = new DBProtocol[factor+1];
+		for (int i = 0; i <= factor; i++) {
+			/*Trujillo- Mar 24, 2014
+			 * this is computed in that way to avoid numerical error.*/
+			pf = 1 - (factor-i)/(double)factor;
+			result[i] = new MunillaAndPeinadoProtocol(pf, SIZE_OF_NONCES);
+			if (pf > 1) pf = 1;
+		}
+		return result;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "MP_pf_"+pf;
 	}
 
 }

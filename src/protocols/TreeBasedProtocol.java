@@ -17,6 +17,10 @@ public class TreeBasedProtocol extends DBProtocol{
 		this.sizeOfNonces = sizeOfNonces;
 	}
 
+	public TreeBasedProtocol(){
+		this(0, SIZE_OF_NONCES);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "tree-based";
@@ -25,8 +29,9 @@ public class TreeBasedProtocol extends DBProtocol{
 	@Override
 	public BigDecimal getMafiaFraudProbability(int n) {
 		if (depth == 0) return computeMyFar(n);
-		BigDecimal p = computeMyFar(depth);
-		BigDecimal p1 = p.pow(n/depth);
+		int realDepth = (depth > n)?n:depth;
+		BigDecimal p = computeMyFar(realDepth);
+		BigDecimal p1 = p.pow(n/realDepth);
 		return p1;
 
 	}
@@ -39,8 +44,17 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
-		TreeBasedDistanceFraudSimulator sim = new TreeBasedDistanceFraudSimulator();
-		return new BigDecimal(""+sim.computeDistanceFraud(n));
+		if (depth == 0) {
+			TreeBasedDistanceFraudSimulator sim = new TreeBasedDistanceFraudSimulator();
+			return new BigDecimal(""+sim.computeDistanceFraud(n));
+		}
+		else{
+			int realDepth = (depth > n)?n:depth;
+			TreeBasedDistanceFraudSimulator sim = new TreeBasedDistanceFraudSimulator();
+			BigDecimal p = new BigDecimal(""+sim.computeDistanceFraud(depth));
+			BigDecimal p1 = p.pow(n/realDepth);
+			return p1;
+		}
 	}
 
 	@Override
@@ -77,6 +91,25 @@ public class TreeBasedProtocol extends DBProtocol{
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
 		return 1;
+	}
+
+	/*Trujillo- Mar 25, 2014
+	 * depth = 0 is the first of them. After that we take 1, 2, 4, etc*/
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		DBProtocol[] result = new DBProtocol[factor];
+		result[0] = new TreeBasedProtocol();
+		int d = 1;
+		for (int i = 1; i < factor; i++) {
+			result[i] = new TreeBasedProtocol(d, SIZE_OF_NONCES);
+			d += 1;
+		}
+		return result;
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "Tree_depth_"+depth;
 	}
 
 }

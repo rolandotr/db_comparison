@@ -11,6 +11,10 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 		this.sizeOfSignature = sizeOfSignature;
 		this.maxSizeOfNonce = maxSizeOfNonce;
 	}
+
+	public RasmussenAndCapckunProtocol(){
+		this(SIZE_OF_COMMIT, SIZE_OF_NONCES);
+	}
 	
 	@Override
 	public String getAcronym() {
@@ -64,6 +68,16 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
 		return 3;
+	}
+
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new RasmussenAndCapckunProtocol()};
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "RC";
 	}
 
 }

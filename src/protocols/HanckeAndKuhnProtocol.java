@@ -9,6 +9,10 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 	public HanckeAndKuhnProtocol(int sizeOfNonces){
 		this.sizeOfNonces = sizeOfNonces;
 	}
+
+	public HanckeAndKuhnProtocol(){
+		this(SIZE_OF_NONCES);
+	}
 	@Override
 	public String getAcronym() {
 		return "HK";
@@ -49,6 +53,15 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 	@Override
 	public int getMinimumNumberOfCryptoCalls() {
 		return 1;
+	}
+	@Override
+	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new HanckeAndKuhnProtocol()};
+	}
+
+	@Override
+	public String getIdentifier() {
+		return "HK";
 	}
 
 }
