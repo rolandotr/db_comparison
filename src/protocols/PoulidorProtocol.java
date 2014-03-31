@@ -71,10 +71,38 @@ public class PoulidorProtocol extends DBProtocol{
 	}
 
 	
+	private BigDecimal computeProb2(int j, int i){
+		BigInteger den = (new BigInteger(""+2)).pow(i+j);
+		BigInteger t1, t2;
+		BigDecimal result = new BigDecimal(0+"");
+		int max = (i > j)?i:j;
+		for (int k = max; k <= 2*max; k++){
+			if (k-i > i) break;
+			if (k-j > j) break;
+			t1 = Combinatory.comb(i, k-i);
+			t2 = Combinatory.comb(j, k-j);
+			result = result.add(new BigDecimal((t1.multiply(t2))));
+		}
+		result = result.divide(new BigDecimal(den));
+		return result;
+	}
+
+	
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
-		PoulidorDistanceFraudSimulator sim = new PoulidorDistanceFraudSimulator();
-		return new BigDecimal(""+sim.computeDistanceFraud(n));
+		if (n == 0) return BigDecimal.ONE;
+		if (n == 1) return new BigDecimal("0.75");
+		double p  = 1;
+		for (int i = 1; i <= n; i++){
+			p = p*(0.5 + computeProb2(i, i).doubleValue()/2);
+		}
+		BigDecimal half = new BigDecimal(0.5d);
+		BigDecimal four = new BigDecimal(4d);
+		BigDecimal sqrt = half.pow(2*n).add(((four).multiply(half.pow(n))).negate()).add(four.multiply(new BigDecimal(p)));
+		BigDecimal result = half.pow(n);
+		return new BigDecimal(result.doubleValue() + Math.sqrt(sqrt.doubleValue())/2);
+		//PoulidorDistanceFraudSimulator sim = new PoulidorDistanceFraudSimulator();
+		//return new BigDecimal(""+sim.computeDistanceFraud(n));
 	}
 
 	@Override

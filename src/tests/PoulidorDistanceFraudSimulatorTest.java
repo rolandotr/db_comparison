@@ -7,7 +7,7 @@ import protocols.PoulidorProtocol;
 public class PoulidorDistanceFraudSimulatorTest {
 
 	public static void main(String[] args) {
-		test1();
+		//test1();
 		test2();
 		test3();
 	}
@@ -18,7 +18,7 @@ public class PoulidorDistanceFraudSimulatorTest {
 	 * for this protocol. Therefore, this test aims to verify that*/
 	private static void test2(){
 		PoulidorProtocol pro = new PoulidorProtocol(0);
-		int n = 6;
+		int n = 128;
 		for (int i = 1; i <= n; i++) {
 			double mafia = pro.getMafiaFraudProbability(i).doubleValue();
 			double distance = pro.getDistanceFraudProbability(i).doubleValue();
@@ -31,7 +31,7 @@ public class PoulidorDistanceFraudSimulatorTest {
 	 * of n.*/
 	private static void test1(){
 		PoulidorDistanceFraudSimulator sim = new PoulidorDistanceFraudSimulator();
-		int n = 2;
+		int n = 128;
 		for (int i = 2; i <= n; i++){
 			double value = sim.computeDistanceFraud(i);
 			System.out.println("n = "+i+" df = "+value);

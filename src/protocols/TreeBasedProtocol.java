@@ -41,10 +41,36 @@ public class TreeBasedProtocol extends DBProtocol{
 		a = a.pow(k);
 		return a.multiply(new BigDecimal((double)k/2+1));
 	}
+	private BigDecimal distanceFraudUpperBound(int n){
+		BigDecimal half = new BigDecimal(0.5d);
+		BigDecimal p = new BigDecimal(1);
+		for (int i = 1; i <= n; i++){
+			p = p.multiply(half.add(half.pow(i+1)));
+		}
+		BigDecimal four = new BigDecimal(4d);
+		BigDecimal sqrt = half.pow(2*n).add(((four).multiply(half.pow(n))).negate()).add(four.multiply(p));
+		BigDecimal result = half.pow(n);
+		double tt = (result.doubleValue() + Math.sqrt(sqrt.doubleValue()))/2;
+		return new BigDecimal(tt);
+	}
 
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
+		if (depth == 4)
+			return new BigDecimal(Math.pow(0.28, n/4));
+		if (depth == 2) return new BigDecimal(Math.pow(0.5625, n/2));
+		if (depth == 3) return new BigDecimal(Math.pow(0.4, n/3));
+		if (depth == 1) return new BigDecimal(Math.pow(0.75, n));		
+		BigDecimal result;
 		if (depth == 0) {
+			return distanceFraudUpperBound(n);
+		}
+		else {
+			result = distanceFraudUpperBound(depth);
+			return result.pow(n/depth);
+		}
+		
+		/*if (depth == 0) {
 			TreeBasedDistanceFraudSimulator sim = new TreeBasedDistanceFraudSimulator();
 			return new BigDecimal(""+sim.computeDistanceFraud(n));
 		}
@@ -54,7 +80,7 @@ public class TreeBasedProtocol extends DBProtocol{
 			BigDecimal p = new BigDecimal(""+sim.computeDistanceFraud(depth));
 			BigDecimal p1 = p.pow(n/realDepth);
 			return p1;
-		}
+		}*/
 	}
 
 	@Override

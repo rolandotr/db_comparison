@@ -3,13 +3,15 @@ package protocols;
 import java.security.SecureRandom;
 import java.util.TreeMap;
 
+import utils.Combinatory;
+
 /*Trujillo- Mar 11, 2014
  * This simulator is similar to an exhaustive search. However, it limits
  * the number of sequences kept in memory. Instead of having all of them, 
  * we just keep the ones that are repeated more often.*/
 public class TreeBasedDistanceFraudSimulator{
 	
-	public static final int RUNS = 1000000;
+	public static final int RUNS = 100000;
 	public static final int DEFAULT_SIZE = 65536;
 
 	private int size = DEFAULT_SIZE;
@@ -50,10 +52,9 @@ public class TreeBasedDistanceFraudSimulator{
 	 * to SIZE by keeping only those sequences with the higher number of
 	 * appearances.
 	 * */
-	
-	/*Trujillo- Mar 11, 2014
-	 * TODO: Change the tree map by a sorted list using the class
-	 * SequenceInTree.*/
+		
+	/*Trujillo- Mar 31, 2014
+	 * This in old a not efficient implementation, yet it works.*/
 	private TreeMap<SequenceInTree, SequenceInTree> runForMostFrequentSequence(int n, 
 			TreeMap<SequenceInTree, SequenceInTree> sequences){
 		if (n == 0) return sequences;

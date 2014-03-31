@@ -6,7 +6,7 @@ import protocols.TreeBasedProtocol;
 public class TreeBasedDistanceFraudSimulatorTest {
 
 	public static void main(String[] args) {
-		test1();
+		//test1();
 		test2();
 		test3();
 	}
@@ -18,7 +18,7 @@ public class TreeBasedDistanceFraudSimulatorTest {
 	 * for this protocol. Therefore, this test aims to verify that*/
 	private static void test2(){
 		TreeBasedProtocol pro = new TreeBasedProtocol(0, 0);
-		int n = 6;
+		int n = 128;
 		for (int i = 1; i <= n; i++) {
 			double mafia = pro.getMafiaFraudProbability(i).doubleValue();
 			double distance = pro.getDistanceFraudProbability(i).doubleValue();
