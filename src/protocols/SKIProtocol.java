@@ -46,12 +46,17 @@ public class SKIProtocol extends DBProtocol{
 	/*Trujillo- Mar 14, 2014
 	 * Again, as in mafia fraud, we take q = 2*/
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		n = getFairNumberOfRounds(n, t);
 		double q = 2;
 		double tmp = (q*t+2*(1-q))/(q*t);
 		BigDecimal result = new BigDecimal(""+tmp);
 		return result.pow(n);
+	}
+
+	@Override
+	public int getYearOfPublication() {
+		return 2013;
 	}
 
 	@Override

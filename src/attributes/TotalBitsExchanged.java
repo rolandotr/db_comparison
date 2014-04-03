@@ -11,4 +11,8 @@ public class TotalBitsExchanged extends DoubleAttribute{
 		return new TotalBitsExchanged(-1);
 	}
 
+	@Override
+	public String toString() {
+		return "bitsExchanged = "+getValue();
+	}
 }

@@ -11,4 +11,8 @@ public class DistanceFraudProbability extends DoubleAttribute{
 		return new DistanceFraudProbability(-1);
 	}
 		
+	@Override
+	public String toString() {
+		return "distance = "+getValue();
+	}
 }

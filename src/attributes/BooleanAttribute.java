@@ -12,6 +12,10 @@ public class BooleanAttribute extends Attribute{
 		return value;
 	}
 
+	public boolean setValue(boolean value){
+		return this.value = value;
+	}
+	
 	@Override
 	public BooleanAttribute getInstance() {
 		return new BooleanAttribute(false);

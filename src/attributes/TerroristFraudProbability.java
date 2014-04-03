@@ -11,4 +11,8 @@ public class TerroristFraudProbability extends DoubleAttribute{
 	public TerroristFraudProbability getInstance() {
 		return new TerroristFraudProbability(-1);
 	}
+	@Override
+	public String toString() {
+		return "terrorist = "+getValue();
+	}
 }

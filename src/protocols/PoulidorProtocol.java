@@ -32,6 +32,10 @@ public class PoulidorProtocol extends DBProtocol{
 		}
 		return result;
 	}
+	@Override
+	public int getYearOfPublication() {
+		return 2010;
+	}
 
 	private BigDecimal maxProb2(int t, int n) {
 		BigDecimal result = new BigDecimal(1);
@@ -101,12 +105,12 @@ public class PoulidorProtocol extends DBProtocol{
 		BigDecimal sqrt = half.pow(2*n).add(((four).multiply(half.pow(n))).negate()).add(four.multiply(new BigDecimal(p)));
 		BigDecimal result = half.pow(n);
 		return new BigDecimal(result.doubleValue() + Math.sqrt(sqrt.doubleValue())/2);
-		//PoulidorDistanceFraudSimulator sim = new PoulidorDistanceFraudSimulator();
-		//return new BigDecimal(""+sim.computeDistanceFraud(n));
+		/*PoulidorDistanceFraudSimulator sim = new PoulidorDistanceFraudSimulator();
+		return new BigDecimal(""+sim.computeDistanceFraud(n));*/
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
 	}
 

@@ -6,12 +6,11 @@ import protocols.TreeBasedProtocol;
 public class TreeBasedDistanceFraudSimulatorTest {
 
 	public static void main(String[] args) {
-		//test1();
 		test2();
 		test3();
+		test1();
 	}
-	
-	
+		
 	
 	/*Trujillo- Mar 11, 2014
 	 * We believe that mafia fraud upper bound distance fraud

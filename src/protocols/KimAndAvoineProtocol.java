@@ -43,7 +43,7 @@ public class KimAndAvoineProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
 	}
 
@@ -89,6 +89,11 @@ public class KimAndAvoineProtocol extends DBProtocol{
 	@Override
 	public String getIdentifier() {
 		return "KA_pd_"+pd;
+	}
+
+	@Override
+	public int getYearOfPublication() {
+		return 2011;
 	}
 
 }

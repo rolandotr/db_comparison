@@ -11,4 +11,8 @@ public class Memory extends DoubleAttribute{
 		return new Memory(-1);
 	}
 	
+	@Override
+	public String toString() {
+		return "memory = "+getValue();
+	}
 }

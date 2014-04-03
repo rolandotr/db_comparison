@@ -1,6 +1,17 @@
 package protocols;
 
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
+
+import attributes.Attribute;
+import attributes.DistanceFraudProbability;
+import attributes.FinalSlowPhase;
+import attributes.MafiaFraudProbability;
+import attributes.Memory;
+import attributes.TerroristFraudProbability;
+import attributes.TotalBitsExchanged;
+import attributes.YearOfPublication;
 
 public abstract class DBProtocol {
 
@@ -22,11 +33,13 @@ public abstract class DBProtocol {
 
 	public abstract BigDecimal getDistanceFraudProbability(int n);
 	
-	public abstract BigDecimal getTerroritFraudProbability(int n);
+	public abstract BigDecimal getTerroristFraudProbability(int n);
 	
 	public abstract boolean hasFinalSlowPhase();
 	
 	public abstract boolean hasMultipleBitExchange();
+	
+	public abstract int getYearOfPublication();
 	
 	/*Trujillo- Mar 17, 2014
 	 * We define memory as the memory required during the slow phase
@@ -57,5 +70,93 @@ public abstract class DBProtocol {
 	 * is the same with different parameters. Remember that n is not considered a parameter.*/
 	public abstract String getIdentifier();
 	
+	/*Trujillo- Apr 3, 2014
+	 * */
+	public Attribute getAttribute(Attribute a, int n){
+		if (a instanceof DistanceFraudProbability){
+			return new DistanceFraudProbability(getDistanceFraudProbability(n).doubleValue());
+		}
+		else if (a instanceof MafiaFraudProbability){
+			return new MafiaFraudProbability(getMafiaFraudProbability(n).doubleValue());
+		} 
+		else if (a instanceof TerroristFraudProbability){
+			return new TerroristFraudProbability(getTerroristFraudProbability(n).doubleValue());
+		} 
+		else if (a instanceof TotalBitsExchanged){
+			return new TotalBitsExchanged(getTotalBitsExchanged(n));
+		} 
+		else if (a instanceof Memory){
+			return new Memory(getMemory(n));
+		}
+		else if (a instanceof FinalSlowPhase){
+			return new FinalSlowPhase(hasFinalSlowPhase());
+		}
+		else if (a instanceof YearOfPublication){
+			return new YearOfPublication(getYearOfPublication());
+		}
+		else{
+			throw new RuntimeException("Unsuported attribute: "+a.toString());
+		}
+	}
+	
+	/*Trujillo- Mar 24, 2014
+	 * The protocols to be loaded. Note that for each it might be several settings. The number of settings is bounded
+	 * by factor^m where m is the number of parameters that can be changed. Also note that the number of rounds is not
+	 * a parameter.*/
+	public static DBProtocol[] loadProtocols(int factor) {
+		List<DBProtocol[]> protocols = new LinkedList<>();
+		int length = 0;
+		DBProtocol[] tmp = new BrandsAndChaumProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new BussardAndBaggaProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new HanckeAndKuhnProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new KimAndAvoineProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new MADProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new MunillaAndPeinadoProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new PoulidorProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new RasmussenAndCapckunProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new SKIProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new SwissKnifeProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new TreeBasedProtocol().getAllInstances(factor);
+		length += tmp.length;
+		protocols.add(tmp);
+		DBProtocol[] result = new DBProtocol[length];
+		int index = 0;
+		for (DBProtocol[] list : protocols) {
+			for (int i = 0; i < list.length; i++) {
+				result[index] = list[i];
+				index++;
+			}
+		}
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DBProtocol){
+			DBProtocol tmp = (DBProtocol)obj;
+			return tmp.getIdentifier().equals(this.getIdentifier());
+		}
+		else return false;
+	}
 
 }

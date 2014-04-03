@@ -21,6 +21,11 @@ public class SwissKnifeProtocol extends DBProtocol{
 	}
 
 	@Override
+	public int getYearOfPublication() {
+		return 2008;
+	}
+	
+	@Override
 	public BigDecimal getMafiaFraudProbability(int n) {
 		return ONE_OVER_TWO.pow(n);
 	}
@@ -31,7 +36,7 @@ public class SwissKnifeProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return THREE_OVER_FOUR.pow(n);
 	}
 

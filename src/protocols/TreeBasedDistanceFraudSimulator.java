@@ -3,7 +3,6 @@ package protocols;
 import java.security.SecureRandom;
 import java.util.TreeMap;
 
-import utils.Combinatory;
 
 /*Trujillo- Mar 11, 2014
  * This simulator is similar to an exhaustive search. However, it limits

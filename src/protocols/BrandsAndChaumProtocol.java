@@ -30,7 +30,7 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
 	}
 
@@ -66,6 +66,11 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 	@Override
 	public String getIdentifier() {
 		return "BC";
+	}
+
+	@Override
+	public int getYearOfPublication() {
+		return 1993;
 	}
 
 }

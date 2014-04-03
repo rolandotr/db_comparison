@@ -31,6 +31,11 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 		return ONE_OVER_TWO.pow(n);
 	}
 
+	@Override
+	public int getYearOfPublication() {
+		return 2010;
+	}
+
 	/*Trujillo- Mar 14, 2014
 	 * Here apply the same comment than for mafia. This is decision
 	 * has been taken because is otherwise unfair to compare this
@@ -41,7 +46,7 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
 	}
 

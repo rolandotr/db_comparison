@@ -25,6 +25,11 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 	}
 
 	@Override
+	public int getYearOfPublication() {
+		return 2006;
+	}
+
+	@Override
 	public BigDecimal getMafiaFraudProbability(int n) {
 		BigDecimal blackBoxPreAsk;
 		if (pf < (double)(4)/7){
@@ -56,7 +61,7 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
 	}
 

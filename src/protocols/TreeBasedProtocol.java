@@ -36,6 +36,11 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	}
 
+	@Override
+	public int getYearOfPublication() {
+		return 2009;
+	}
+
 	public BigDecimal computeMyFar(int k) {
 		BigDecimal a = new BigDecimal(0.5d);
 		a = a.pow(k);
@@ -84,7 +89,7 @@ public class TreeBasedProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
 	}
 

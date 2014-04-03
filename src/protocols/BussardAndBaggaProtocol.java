@@ -26,7 +26,7 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return THREE_OVER_FOUR.pow(n);
 	}
 
@@ -62,6 +62,11 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 	@Override
 	public String getIdentifier() {
 		return "BB";
+	}
+	
+	@Override
+	public int getYearOfPublication() {
+		return 2005;
 	}
 
 }

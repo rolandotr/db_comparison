@@ -29,7 +29,7 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 	}
 
 	@Override
-	public BigDecimal getTerroritFraudProbability(int n) {
+	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
 	}
 
@@ -62,6 +62,11 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 	@Override
 	public String getIdentifier() {
 		return "HK";
+	}
+
+	@Override
+	public int getYearOfPublication() {
+		return 2005;
 	}
 
 }
