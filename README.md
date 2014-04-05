@@ -1,7 +1,7 @@
 db_comparison
 =============
 
-Copyright 2011 Gildas Avoine and Rolando Trujillo Rasua
+Copyright 2014 Gildas Avoine and Rolando Trujillo Rasua
 -----------------
 
 This java project is aimed at comparing distance bounding protocols. It contains implementations of all, or almost all, DB protocols proposed up-to-date. The flexible design and the methodology used to compare DB protocols make it a great tool for distance bounding protocols designers. More information can be obtained from our paper [1].
