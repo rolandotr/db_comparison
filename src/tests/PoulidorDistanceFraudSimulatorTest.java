@@ -1,6 +1,5 @@
 package tests;
 
-import protocols.HanckeAndKuhnProtocol;
 import protocols.PoulidorDistanceFraudSimulator;
 import protocols.PoulidorProtocol;
 
@@ -19,12 +18,11 @@ public class PoulidorDistanceFraudSimulatorTest {
 	 * for this protocol. Therefore, this test aims to verify that*/
 	private static void test2(){
 		PoulidorProtocol pro = new PoulidorProtocol(0);
-		HanckeAndKuhnProtocol p = new HanckeAndKuhnProtocol();
 		int n = 128;
 		for (int i = 1; i <= n; i++) {
 			double mafia = pro.getMafiaFraudProbability(i).doubleValue();
 			double distance = pro.getDistanceFraudProbability(i).doubleValue();
-			System.out.println("n = "+i+" : mafia = "+p.getMafiaFraudProbability(i).doubleValue()+" : distance = "+distance);
+			System.out.println("n = "+i+" : mafia = "+mafia+" : distance = "+distance);
 		}
 	}
 

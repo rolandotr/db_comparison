@@ -1,6 +1,5 @@
 package attributes;
 
-import attributes.scales.NoScale;
 
 public class BooleanAttribute extends Attribute{
 

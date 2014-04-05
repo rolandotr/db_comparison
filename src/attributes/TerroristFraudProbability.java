@@ -1,18 +1,21 @@
 package attributes;
 
-import attributes.scales.LogScale;
+import attributes.scales.DoubleScale;
 
 public class TerroristFraudProbability extends DoubleAttribute{
 
 	public TerroristFraudProbability(double value){
 		super(value);
-		setScale(new LogScale<DoubleAttribute>(2));
+	}
+
+	public TerroristFraudProbability(double value, DoubleScale scale){
+		super(value, scale);
 	}
 
 
 	@Override
 	public TerroristFraudProbability getInstance() {
-		return new TerroristFraudProbability(-1);
+		return new TerroristFraudProbability(-1, scale);
 	}
 	@Override
 	public String toString() {

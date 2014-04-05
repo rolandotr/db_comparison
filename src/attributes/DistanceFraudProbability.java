@@ -1,17 +1,21 @@
 package attributes;
 
-import attributes.scales.LogScale;
+
+import attributes.scales.DoubleScale;
 
 public class DistanceFraudProbability extends DoubleAttribute{
 
 	public DistanceFraudProbability(double value){
 		super(value);
-		setScale(new LogScale<DoubleAttribute>(2));
+	}
+
+	public DistanceFraudProbability(double value, DoubleScale scale){
+		super(value, scale);
 	}
 
 	@Override
 	public DistanceFraudProbability getInstance() {
-		return new DistanceFraudProbability(-1);
+		return new DistanceFraudProbability(-1, scale);
 	}
 		
 	@Override

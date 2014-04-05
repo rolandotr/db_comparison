@@ -3,7 +3,6 @@ package attributes.comparators;
 import attributes.Attribute;
 import attributes.BooleanAttribute;
 import attributes.DoubleAttribute;
-import attributes.YearOfPublication;
 
 /*Trujillo- Mar 17, 2014
  * In this class we basically say that: i) in case of numerical attributes the 

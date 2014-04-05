@@ -1,18 +1,23 @@
 package attributes;
 
-import attributes.scales.LogScale;
+import attributes.scales.DoubleScale;
 
 public class MafiaFraudProbability extends DoubleAttribute{
 
+
 	public MafiaFraudProbability(double value){
 		super(value);
-		setScale(new LogScale<DoubleAttribute>(2));
+	}
+	
+	public MafiaFraudProbability(double value, DoubleScale scale){
+		super(value, scale);
 	}
 
 	@Override
 	public MafiaFraudProbability getInstance() {
-		return new MafiaFraudProbability(-1);
+		return new MafiaFraudProbability(-1, scale);
 	}
+	
 	@Override
 	public String toString() {
 		return "mafia = "+getValue();

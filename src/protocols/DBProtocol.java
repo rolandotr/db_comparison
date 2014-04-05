@@ -6,6 +6,7 @@ import java.util.List;
 
 import attributes.Attribute;
 import attributes.DistanceFraudProbability;
+import attributes.DoubleAttribute;
 import attributes.FinalSlowPhase;
 import attributes.MafiaFraudProbability;
 import attributes.Memory;
@@ -74,19 +75,24 @@ public abstract class DBProtocol {
 	 * */
 	public Attribute getAttribute(Attribute a, int n){
 		if (a instanceof DistanceFraudProbability){
-			return new DistanceFraudProbability(getDistanceFraudProbability(n).doubleValue());
+			return new DistanceFraudProbability(getDistanceFraudProbability(n).doubleValue(), 
+					((DoubleAttribute)a).scale);
 		}
 		else if (a instanceof MafiaFraudProbability){
-			return new MafiaFraudProbability(getMafiaFraudProbability(n).doubleValue());
+			return new MafiaFraudProbability(getMafiaFraudProbability(n).doubleValue(), 
+					((DoubleAttribute)a).scale);
 		} 
 		else if (a instanceof TerroristFraudProbability){
-			return new TerroristFraudProbability(getTerroristFraudProbability(n).doubleValue());
+			return new TerroristFraudProbability(getTerroristFraudProbability(n).doubleValue(), 
+					((DoubleAttribute)a).scale);
 		} 
 		else if (a instanceof TotalBitsExchanged){
-			return new TotalBitsExchanged(getTotalBitsExchanged(n));
+			return new TotalBitsExchanged(getTotalBitsExchanged(n), 
+					((DoubleAttribute)a).scale);
 		} 
 		else if (a instanceof Memory){
-			return new Memory(getMemory(n));
+			return new Memory(getMemory(n), 
+					((DoubleAttribute)a).scale);
 		}
 		else if (a instanceof FinalSlowPhase){
 			return new FinalSlowPhase(hasFinalSlowPhase());

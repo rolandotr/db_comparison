@@ -1,32 +1,27 @@
 package attributes;
 
-import attributes.scales.Scale;
+import attributes.scales.DoubleScale;
 
 public abstract class DoubleAttribute extends Attribute{
 
-	protected Scale<DoubleAttribute> scale;
-
 	private double value;
+	public DoubleScale scale;
 	
 	public DoubleAttribute(double value){
 		this.value = value;
 	}
 	
+	public DoubleAttribute(double value, DoubleScale scale){
+		this.value = scale.scale(value);
+		this.scale = scale;
+	}
+	
 	public double getValue(){
-		return scale.scale(this);
 		return value;
 	}
 
 	public void setValue(double value) {
 		this.value = value;
-	}
-	
-	public Scale<DoubleAttribute> getScale() {
-		return scale;
-	}
-
-	public void setScale(Scale<DoubleAttribute> scale) {
-		this.scale = scale;
 	}
 	
 }
