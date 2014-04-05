@@ -5,10 +5,6 @@ import attributes.scales.DoubleScale;
 public class TotalBitsExchanged extends DoubleAttribute{
 
 	
-	public TotalBitsExchanged(int value){
-		super(value);
-	}
-
 	public TotalBitsExchanged(int value, DoubleScale scale){
 		super(value, scale);
 	}

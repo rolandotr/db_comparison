@@ -4,10 +4,6 @@ import attributes.scales.DoubleScale;
 
 public class TerroristFraudProbability extends DoubleAttribute{
 
-	public TerroristFraudProbability(double value){
-		super(value);
-	}
-
 	public TerroristFraudProbability(double value, DoubleScale scale){
 		super(value, scale);
 	}

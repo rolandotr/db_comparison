@@ -98,7 +98,7 @@ public abstract class DBProtocol {
 			return new FinalSlowPhase(hasFinalSlowPhase());
 		}
 		else if (a instanceof YearOfPublication){
-			return new YearOfPublication(getYearOfPublication());
+			return new YearOfPublication(getYearOfPublication(), ((DoubleAttribute)a).scale);
 		}
 		else{
 			throw new RuntimeException("Unsuported attribute: "+a.toString());

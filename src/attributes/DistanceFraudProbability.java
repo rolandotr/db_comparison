@@ -5,10 +5,6 @@ import attributes.scales.DoubleScale;
 
 public class DistanceFraudProbability extends DoubleAttribute{
 
-	public DistanceFraudProbability(double value){
-		super(value);
-	}
-
 	public DistanceFraudProbability(double value, DoubleScale scale){
 		super(value, scale);
 	}
