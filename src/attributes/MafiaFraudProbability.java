@@ -1,9 +1,12 @@
 package attributes;
 
+import attributes.scales.LogScale;
+
 public class MafiaFraudProbability extends DoubleAttribute{
 
 	public MafiaFraudProbability(double value){
 		super(value);
+		setScale(new LogScale<DoubleAttribute>(2));
 	}
 
 	@Override
@@ -12,6 +15,6 @@ public class MafiaFraudProbability extends DoubleAttribute{
 	}
 	@Override
 	public String toString() {
-		return "memory = "+getValue();
+		return "mafia = "+getValue();
 	}
 }

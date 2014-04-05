@@ -54,7 +54,7 @@ public class SwissKnifeProtocol extends DBProtocol{
 		return false;
 	}
 	@Override
-	public int getMemory(int n) {
+	public long getMemory(int n) {
 		return getTotalBitsExchanged(n)+3*n+2*sizeOfSecret;
 	}
 	@Override

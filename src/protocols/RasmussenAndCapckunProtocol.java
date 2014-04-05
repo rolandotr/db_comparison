@@ -66,7 +66,7 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMemory(int n) {
+	public long getMemory(int n) {
 		return getTotalBitsExchanged(n)+maxSizeOfNonce*2;
 	}
 

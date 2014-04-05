@@ -2,7 +2,7 @@ package attributes;
 
 public class Memory extends DoubleAttribute{
 
-	public Memory(int value){
+	public Memory(long value){
 		super(value);
 	}
 

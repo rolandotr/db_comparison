@@ -46,7 +46,7 @@ public abstract class DBProtocol {
 	 * that is provided by the method getTotalBitsExchanged plus the 
 	 * number of bits exchanged during the fast phase. Note that, this could be quite
 	 * confusing for some protocols as presented in the survey right now.*/
-	public abstract int getMemory(int n);
+	public abstract long getMemory(int n);
 	
 	public abstract int getMinimumNumberOfCryptoCalls();
 	
@@ -159,4 +159,9 @@ public abstract class DBProtocol {
 		else return false;
 	}
 
+	@Override
+	public String toString() {
+		return getIdentifier();
+	}
 }
+

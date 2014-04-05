@@ -130,7 +130,7 @@ public class PoulidorProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMemory(int n) {
+	public long getMemory(int n) {
 		return getTotalBitsExchanged(n)+4*n;
 	}
 

@@ -1,9 +1,12 @@
 package attributes;
 
+import attributes.scales.LogScale;
+
 public class TerroristFraudProbability extends DoubleAttribute{
 
 	public TerroristFraudProbability(double value){
 		super(value);
+		setScale(new LogScale<DoubleAttribute>(2));
 	}
 
 

@@ -1,6 +1,9 @@
 package attributes;
 
+import attributes.scales.Scale;
+
 public abstract class Attribute {
+	
 	
 	public abstract Attribute getInstance();
 
@@ -11,8 +14,10 @@ public abstract class Attribute {
 				new MafiaFraudProbability(0),
 				new Memory(0),
 				new TerroristFraudProbability(0),
-				new TotalBitsExchanged(0),
+				//new TotalBitsExchanged(0),
 				new YearOfPublication(0),
 		};		
 	}
+
+
 }

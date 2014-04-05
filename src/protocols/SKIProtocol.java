@@ -47,6 +47,7 @@ public class SKIProtocol extends DBProtocol{
 	 * Again, as in mafia fraud, we take q = 2*/
 	@Override
 	public BigDecimal getTerroristFraudProbability(int n) {
+		if (t <= 2) return ONE;
 		n = getFairNumberOfRounds(n, t);
 		double q = 2;
 		double tmp = (q*t+2*(1-q))/(q*t);
@@ -78,7 +79,7 @@ public class SKIProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMemory(int n) {
+	public long getMemory(int n) {
 		return getTotalBitsExchanged(n)+t*n;
 	}
 

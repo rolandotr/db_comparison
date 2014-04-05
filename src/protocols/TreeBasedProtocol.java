@@ -1,6 +1,7 @@
 package protocols;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class TreeBasedProtocol extends DBProtocol{
 
@@ -71,8 +72,9 @@ public class TreeBasedProtocol extends DBProtocol{
 			return distanceFraudUpperBound(n);
 		}
 		else {
-			result = distanceFraudUpperBound(depth);
-			return result.pow(n/depth);
+			int realDepth = (depth > n)?n:depth;
+			result = distanceFraudUpperBound(realDepth);
+			return result.pow(n/realDepth);
 		}
 		
 		/*if (depth == 0) {
@@ -112,11 +114,28 @@ public class TreeBasedProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMemory(int n) {
-		if (depth == 0)
-			return getTotalBitsExchanged(n)+(int)Math.pow(2, n+1)-2;
-		else return getTotalBitsExchanged(n)+(n/depth)*((int)Math.pow(2, depth+1)-2);
-
+	public long getMemory(int n) {
+		//System.out.println("Depth = "+depth+", n = "+n);
+		if (depth == 0){
+			BigInteger tmp = new BigInteger(2+"");
+			tmp = tmp.pow(n+1);
+			tmp = tmp.add(new BigInteger((getTotalBitsExchanged(n)-2)+""));
+			//dealing with numerical errors
+			if (tmp.bitLength() > 63) return Long.MAX_VALUE;
+			return tmp.longValue();
+		}else{
+			int realDepth = (depth > n)?n:depth;
+			BigInteger tmp = new BigInteger(2+"");
+			tmp = tmp.pow(realDepth+1);
+			BigInteger minusTwo = new BigInteger(2+"");
+			minusTwo = minusTwo.negate();
+			tmp = tmp.add(minusTwo);
+			tmp = tmp.multiply(new BigInteger((n/realDepth)+""));
+			tmp = tmp.add(new BigInteger((getTotalBitsExchanged(n))+""));
+			//dealing with numerical errors
+			if (tmp.bitLength() > 63) return Long.MAX_VALUE;
+			return tmp.longValue();
+		}
 	}
 
 	@Override
@@ -129,11 +148,8 @@ public class TreeBasedProtocol extends DBProtocol{
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
 		DBProtocol[] result = new DBProtocol[factor];
-		result[0] = new TreeBasedProtocol();
-		int d = 1;
-		for (int i = 1; i < factor; i++) {
-			result[i] = new TreeBasedProtocol(d, SIZE_OF_NONCES);
-			d += 1;
+		for (int i = 0; i < factor; i++) {
+			result[i] = new TreeBasedProtocol(i, SIZE_OF_NONCES);
 		}
 		return result;
 	}

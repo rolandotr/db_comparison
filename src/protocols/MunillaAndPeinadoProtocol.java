@@ -81,7 +81,7 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMemory(int n) {
+	public long getMemory(int n) {
 		return getTotalBitsExchanged(n)+2*n;
 	}
 
