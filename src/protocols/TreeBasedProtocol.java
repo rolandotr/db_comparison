@@ -29,6 +29,7 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getMafiaFraudProbability(int n) {
+		if (depth >= n) return ONE;//because this is not the correct protocol for this n, but depth = 0.
 		if (depth == 0) return computeMyFar(n);
 		int realDepth = (depth > n)?n:depth;
 		BigDecimal p = computeMyFar(realDepth);
@@ -62,17 +63,18 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
-		if (depth == 4)
+		if (depth >= n) return ONE;//because this is not the correct protocol for this n, but depth = 0.
+		int realDepth = (depth > n)?n:depth;
+		if (realDepth == 4)
 			return new BigDecimal(Math.pow(0.28, n/4));
-		if (depth == 2) return new BigDecimal(Math.pow(0.5625, n/2));
-		if (depth == 3) return new BigDecimal(Math.pow(0.4, n/3));
-		if (depth == 1) return new BigDecimal(Math.pow(0.75, n));		
+		if (realDepth == 2) return new BigDecimal(Math.pow(0.5625, n/2));
+		if (realDepth == 3) return new BigDecimal(Math.pow(0.4, n/3));
+		if (realDepth == 1) return new BigDecimal(Math.pow(0.75, n));		
 		BigDecimal result;
 		if (depth == 0) {
 			return distanceFraudUpperBound(n);
 		}
 		else {
-			int realDepth = (depth > n)?n:depth;
 			result = distanceFraudUpperBound(realDepth);
 			return result.pow(n/realDepth);
 		}
@@ -139,7 +141,7 @@ public class TreeBasedProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 1;
 	}
 
@@ -155,8 +157,20 @@ public class TreeBasedProtocol extends DBProtocol{
 	}
 
 	@Override
+	public DBProtocol[] getDefaultInstances() {
+		return new DBProtocol[]{
+				new TreeBasedProtocol(0, SIZE_OF_NONCES),
+				new TreeBasedProtocol(2, SIZE_OF_NONCES),
+				new TreeBasedProtocol(4, SIZE_OF_NONCES),
+				new TreeBasedProtocol(6, SIZE_OF_NONCES),
+				new TreeBasedProtocol(8, SIZE_OF_NONCES),
+				new TreeBasedProtocol(12, SIZE_OF_NONCES),
+		};
+	}
+
+	@Override
 	public String getIdentifier() {
-		return "Tree_depth_"+depth;
+		return "Tree-"+depth;
 	}
 
 }

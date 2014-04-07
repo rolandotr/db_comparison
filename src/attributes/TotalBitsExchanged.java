@@ -1,21 +1,27 @@
 package attributes;
 
-import attributes.scales.DoubleScale;
+import attributes.scales.Scale;
 
-public class TotalBitsExchanged extends DoubleAttribute{
+public class TotalBitsExchanged extends Attribute<Integer>{
 
 	
-	public TotalBitsExchanged(int value, DoubleScale scale){
+	public TotalBitsExchanged(int value, Scale<Integer> scale){
 		super(value, scale);
 	}
 
 	@Override
 	public TotalBitsExchanged getInstance() {
-		return new TotalBitsExchanged(-1, scale);
+		return new TotalBitsExchanged(value, scale);
 	}
 
 	@Override
 	public String toString() {
 		return "bitsExchanged = "+getValue();
 	}
+
+	@Override
+	public String getName() {
+		return "BitsExchanged";
+	}
+	
 }

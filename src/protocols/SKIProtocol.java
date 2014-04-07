@@ -84,7 +84,7 @@ public class SKIProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 1;
 	}
 
@@ -98,8 +98,19 @@ public class SKIProtocol extends DBProtocol{
 	}
 
 	@Override
+	public DBProtocol[] getDefaultInstances() {
+		return new DBProtocol[]{
+				new SKIProtocol(2, SIZE_OF_NONCES),
+				new SKIProtocol(3, SIZE_OF_NONCES),
+				new SKIProtocol(4, SIZE_OF_NONCES),
+				new SKIProtocol(8, SIZE_OF_NONCES),
+				new SKIProtocol(12, SIZE_OF_NONCES),
+		};
+	}
+
+	@Override
 	public String getIdentifier() {
-		return "SKI_t_"+t;
+		return "SKI-"+t;
 	}
 
 	

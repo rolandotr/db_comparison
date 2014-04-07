@@ -58,11 +58,15 @@ public class SwissKnifeProtocol extends DBProtocol{
 		return getTotalBitsExchanged(n)+3*n+2*sizeOfSecret;
 	}
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 2;
 	}
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new SwissKnifeProtocol()};
+	}
+	@Override
+	public DBProtocol[] getDefaultInstances() {
 		return new DBProtocol[]{new SwissKnifeProtocol()};
 	}
 	@Override

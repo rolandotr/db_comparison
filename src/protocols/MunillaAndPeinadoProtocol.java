@@ -86,7 +86,7 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 2;
 	}
 
@@ -105,8 +105,20 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 	}
 
 	@Override
+	public DBProtocol[] getDefaultInstances() {
+		return new DBProtocol[]{
+				new MunillaAndPeinadoProtocol(0, SIZE_OF_NONCES),
+				new MunillaAndPeinadoProtocol(0.2, SIZE_OF_NONCES),
+				new MunillaAndPeinadoProtocol(0.4, SIZE_OF_NONCES),
+				new MunillaAndPeinadoProtocol(0.5, SIZE_OF_NONCES),
+				new MunillaAndPeinadoProtocol(0.6, SIZE_OF_NONCES),
+				new MunillaAndPeinadoProtocol(0.8, SIZE_OF_NONCES),
+				new MunillaAndPeinadoProtocol(1, SIZE_OF_NONCES),
+		};
+	}
+	@Override
 	public String getIdentifier() {
-		return "MP_pf_"+pf;
+		return "MP-"+pf;
 	}
 
 }

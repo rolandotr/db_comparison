@@ -67,16 +67,21 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 
 	@Override
 	public long getMemory(int n) {
-		return getTotalBitsExchanged(n)+maxSizeOfNonce*2;
+		return getTotalBitsExchanged(n)+maxSizeOfNonce+n;
 	}
 
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 3;
 	}
 
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new RasmussenAndCapckunProtocol()};
+	}
+
+	@Override
+	public DBProtocol[] getDefaultInstances() {
 		return new DBProtocol[]{new RasmussenAndCapckunProtocol()};
 	}
 

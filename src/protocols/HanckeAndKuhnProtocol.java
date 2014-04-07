@@ -51,11 +51,16 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 		return getTotalBitsExchanged(n)+2*n;
 	}
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 1;
 	}
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new HanckeAndKuhnProtocol()};
+	}
+
+	@Override
+	public DBProtocol[] getDefaultInstances() {
 		return new DBProtocol[]{new HanckeAndKuhnProtocol()};
 	}
 

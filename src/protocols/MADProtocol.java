@@ -57,11 +57,16 @@ public class MADProtocol extends DBProtocol{
 		return getTotalBitsExchanged(n)+2*n;
 	}
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 4;
 	}
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new MADProtocol(SIZE_OF_NONCES, SIZE_OF_MAC, SIZE_OF_SECRET)};
+	}
+
+	@Override
+	public DBProtocol[] getDefaultInstances() {
 		return new DBProtocol[]{new MADProtocol(SIZE_OF_NONCES, SIZE_OF_MAC, SIZE_OF_SECRET)};
 	}
 

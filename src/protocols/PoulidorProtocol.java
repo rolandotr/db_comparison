@@ -135,12 +135,17 @@ public class PoulidorProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 1;
 	}
 
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new PoulidorProtocol()};
+	}
+
+	@Override
+	public DBProtocol[] getDefaultInstances() {
 		return new DBProtocol[]{new PoulidorProtocol()};
 	}
 

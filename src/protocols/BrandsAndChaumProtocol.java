@@ -49,7 +49,7 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 	}
 	
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 2;
 	}
 
@@ -60,6 +60,11 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new BrandsAndChaumProtocol()};
+	}
+
+	@Override
+	public DBProtocol[] getDefaultInstances() {
 		return new DBProtocol[]{new BrandsAndChaumProtocol()};
 	}
 

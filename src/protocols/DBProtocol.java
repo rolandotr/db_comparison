@@ -1,21 +1,26 @@
 package protocols;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
 
 import attributes.Attribute;
+import attributes.CryptoCalls;
 import attributes.DistanceFraudProbability;
-import attributes.DoubleAttribute;
 import attributes.FinalSlowPhase;
 import attributes.MafiaFraudProbability;
 import attributes.Memory;
 import attributes.TerroristFraudProbability;
 import attributes.TotalBitsExchanged;
 import attributes.YearOfPublication;
+import attributes.scales.Scale;
 
-public abstract class DBProtocol {
+public abstract class DBProtocol implements Serializable{
 
+	
+	private static final long serialVersionUID = -1906510593510227313L;
+	
 	public static final BigDecimal ONE_OVER_TWO = new BigDecimal("0.5");
 	public static final BigDecimal THREE_OVER_FOUR = new BigDecimal("0.75");
 	public static final BigDecimal ONE = new BigDecimal("1");
@@ -48,9 +53,7 @@ public abstract class DBProtocol {
 	 * number of bits exchanged during the fast phase. Note that, this could be quite
 	 * confusing for some protocols as presented in the survey right now.*/
 	public abstract long getMemory(int n);
-	
-	public abstract int getMinimumNumberOfCryptoCalls();
-	
+		
 	/*Trujillo- Mar 7, 2014
 	 * It is unfair to compare protocols with 1-bit vs x-bits of
 	 * challenge response during the fast phase. This method is implemented
@@ -66,45 +69,60 @@ public abstract class DBProtocol {
 	 * Consequently, if a protocol has k parameters, it has, at most, k^factor different instances.*/
 	public abstract DBProtocol[] getAllInstances(int factor);
 	
+	/*Trujillo- Apr 5, 2014
+	 * Predefined instances of the protocol*/
+	public abstract DBProtocol[] getDefaultInstances();
+	
 	/*Trujillo- Mar 25, 2014
 	 * The identifier should uniquely identify the protocols even if the protocol
 	 * is the same with different parameters. Remember that n is not considered a parameter.*/
 	public abstract String getIdentifier();
 	
+
+	/*Trujillo- Apr 5, 2014
+	 * Minimum number of crypto calls*/
+	public abstract int getCryptoCalls();
+
 	/*Trujillo- Apr 3, 2014
 	 * */
 	public Attribute getAttribute(Attribute a, int n){
 		if (a instanceof DistanceFraudProbability){
 			return new DistanceFraudProbability(getDistanceFraudProbability(n).doubleValue(), 
-					((DoubleAttribute)a).scale);
+					((DistanceFraudProbability)a).getScale());
 		}
 		else if (a instanceof MafiaFraudProbability){
 			return new MafiaFraudProbability(getMafiaFraudProbability(n).doubleValue(), 
-					((DoubleAttribute)a).scale);
+					((MafiaFraudProbability)a).getScale());
 		} 
 		else if (a instanceof TerroristFraudProbability){
 			return new TerroristFraudProbability(getTerroristFraudProbability(n).doubleValue(), 
-					((DoubleAttribute)a).scale);
+					((TerroristFraudProbability)a).getScale());
 		} 
 		else if (a instanceof TotalBitsExchanged){
 			return new TotalBitsExchanged(getTotalBitsExchanged(n), 
-					((DoubleAttribute)a).scale);
+					((TotalBitsExchanged)a).getScale());
 		} 
 		else if (a instanceof Memory){
 			return new Memory(getMemory(n), 
-					((DoubleAttribute)a).scale);
+					((Memory)a).getScale());
 		}
 		else if (a instanceof FinalSlowPhase){
 			return new FinalSlowPhase(hasFinalSlowPhase());
 		}
 		else if (a instanceof YearOfPublication){
-			return new YearOfPublication(getYearOfPublication(), ((DoubleAttribute)a).scale);
+			return new YearOfPublication(getYearOfPublication(), 
+					((YearOfPublication)a).getScale());
+		}
+		else if (a instanceof CryptoCalls){
+			return new CryptoCalls(getCryptoCalls(), 
+					((CryptoCalls)a).getScale());
 		}
 		else{
 			throw new RuntimeException("Unsuported attribute: "+a.toString());
 		}
 	}
 	
+
 	/*Trujillo- Mar 24, 2014
 	 * The protocols to be loaded. Note that for each it might be several settings. The number of settings is bounded
 	 * by factor^m where m is the number of parameters that can be changed. Also note that the number of rounds is not
@@ -156,6 +174,55 @@ public abstract class DBProtocol {
 		return result;
 	}
 	
+	/*Trujillo- Apr 5, 2014
+	 * This load protocols with default parameters*/
+	public static DBProtocol[] loadProtocols() {
+		List<DBProtocol[]> protocols = new LinkedList<>();
+		int length = 0;
+		DBProtocol[] tmp = new BrandsAndChaumProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new BussardAndBaggaProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new HanckeAndKuhnProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new KimAndAvoineProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new MADProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new MunillaAndPeinadoProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new PoulidorProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new RasmussenAndCapckunProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new SKIProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new SwissKnifeProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		tmp = new TreeBasedProtocol().getDefaultInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		DBProtocol[] result = new DBProtocol[length];
+		int index = 0;
+		for (DBProtocol[] list : protocols) {
+			for (int i = 0; i < list.length; i++) {
+				result[index] = list[i];
+				index++;
+			}
+		}
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof DBProtocol){

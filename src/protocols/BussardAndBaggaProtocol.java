@@ -51,12 +51,16 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 	}
 
 	@Override
-	public int getMinimumNumberOfCryptoCalls() {
+	public int getCryptoCalls() {
 		return 4;
 	}
 
 	@Override
 	public DBProtocol[] getAllInstances(int factor) {
+		return new DBProtocol[]{new BussardAndBaggaProtocol()};
+	}
+	@Override
+	public DBProtocol[] getDefaultInstances() {
 		return new DBProtocol[]{new BussardAndBaggaProtocol()};
 	}
 	@Override

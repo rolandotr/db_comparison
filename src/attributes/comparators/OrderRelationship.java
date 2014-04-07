@@ -1,5 +1,6 @@
 package attributes.comparators;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import attributes.Attribute;
@@ -8,6 +9,6 @@ import attributes.Attribute;
  * This interface must be implemented by those classes aimed at defining an 
  * order relationship between attributes. See for example the class 
  * DefaultOrder.*/
-public interface OrderRelationship<T extends Attribute> extends Comparator<T>{
+public interface OrderRelationship<T extends Attribute> extends Comparator<T>, Serializable{
 	
 }
