@@ -15,7 +15,7 @@ import utils.Latex;
 import attributes.Attribute;
 import attributes.comparators.DefaultOrder;
 import attributes.comparators.OrderRelationship;
-import methodology.DominatingRelation;
+import methodology.DominantRelationship;
 import methodology.ParetoFrontier;
 
 public class History {
@@ -128,13 +128,13 @@ public class History {
 			System.out.println("Analyzing why protocol: "+p+" is now in");
 			List<Integer> causes = before.getIndexesToBeRemoved().get(indexesIn[i]);
 			System.out.println("First, let see what happened when n = "+(n-1));
-			DominatingRelation previousRelation = before.getRelationship();
+			DominantRelationship previousRelation = before.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				previousRelation.printInfoOfDomination(cause, p, n-1);
 			}
 			System.out.println("Now, let see what happened when n = "+(n));
-			DominatingRelation currentRelation = current.getRelationship();
+			DominantRelationship currentRelation = current.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				currentRelation.printInfoOfNonDomination(cause, p, n);
@@ -149,13 +149,13 @@ public class History {
 			System.out.println("Analyzing why protocol: "+p+" is now out");
 			List<Integer> causes = current.getIndexesToBeRemoved().get(indexesOut[i]);
 			System.out.println("First, let see what happened when n = "+(n-1));
-			DominatingRelation previousRelation = before.getRelationship();
+			DominantRelationship previousRelation = before.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				previousRelation.printInfoOfNonDomination(cause, p, n-1);
 			}
 			System.out.println("Now, let see what happened when n = "+(n));
-			DominatingRelation currentRelation = current.getRelationship();
+			DominantRelationship currentRelation = current.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				currentRelation.printInfoOfDomination(cause, p, n);

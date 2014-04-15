@@ -17,14 +17,14 @@ public class ParetoFrontier implements Serializable{
 	private DBProtocol[] protocols;
 	private DBProtocol[] frontier;
 	private TreeMap<Integer, List<Integer>> indexesToBeRemoved;
-	private DominatingRelation relationship;
+	private DominantRelationship relationship;
 	
 
 	/*Trujillo- Apr 4, 2014
 	 * This is a private constructor that provides information about a pareto frontier namely: the protocols analyzed, 
 	 * the frontier, and a data structure that details why a protocol does not belong to the pareto frontier.*/
 	private ParetoFrontier(DBProtocol[] protocols, DBProtocol[] frontier, TreeMap<Integer, 
-			List<Integer>> indexesToBeRemoved, DominatingRelation relationship){
+			List<Integer>> indexesToBeRemoved, DominantRelationship relationship){
 		this.protocols = protocols;
 		this.frontier = frontier;
 		this.indexesToBeRemoved = indexesToBeRemoved;
@@ -35,7 +35,7 @@ public class ParetoFrontier implements Serializable{
 	/*Trujillo- Apr 4, 2014
 	 * Compute the pareto frontier according to some attributes and order*/
 	public static ParetoFrontier computeParetoFrontier(DBProtocol[] protocols, OrderRelationship<Attribute> order, Attribute[] attributes, int n){
-		DominatingRelation relationship = new DominatingRelation(order, protocols, attributes, n);
+		DominantRelationship relationship = new DominantRelationship(order, protocols, attributes, n);
 		TreeMap<Integer, List<Integer>> indexesToBeRemoved = new TreeMap<>();
 		for (int i = 0; i < protocols.length; i++) {
 			for (int j = 0; j < protocols.length; j++) {
@@ -92,7 +92,7 @@ public class ParetoFrontier implements Serializable{
 		return indexesToBeRemoved;
 	}
 
-	public DominatingRelation getRelationship() {
+	public DominantRelationship getRelationship() {
 		return relationship;
 	}
 

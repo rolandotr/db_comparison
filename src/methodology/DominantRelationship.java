@@ -9,7 +9,7 @@ import protocols.DBProtocol;
 
 /*Trujillo- Apr 3, 2014
  * This class represents the dominating relationship between protocols.*/
-public class DominatingRelation implements Serializable{
+public class DominantRelationship implements Serializable{
 
 	
 	
@@ -21,7 +21,7 @@ public class DominatingRelation implements Serializable{
 	private boolean domination[][];
 	OrderRelationship<Attribute> order;
 	
-	public DominatingRelation(OrderRelationship<Attribute> order, DBProtocol[] protocols, Attribute[] attributes, int n){
+	public DominantRelationship(OrderRelationship<Attribute> order, DBProtocol[] protocols, Attribute[] attributes, int n){
 		this.attributes = attributes;
 		this.protocols = protocols;
 		this.order = order;
