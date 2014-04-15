@@ -11,6 +11,7 @@ import attributes.DistanceFraudProbability;
 import attributes.FinalSlowPhase;
 import attributes.MafiaFraudProbability;
 import attributes.Memory;
+import attributes.MultipleBitExchanged;
 import attributes.TerroristFraudProbability;
 import attributes.TotalBitsExchanged;
 import attributes.YearOfPublication;
@@ -116,6 +117,9 @@ public abstract class DBProtocol implements Serializable{
 		else if (a instanceof CryptoCalls){
 			return new CryptoCalls(getCryptoCalls(), 
 					((CryptoCalls)a).getScale());
+		}
+		else if (a instanceof MultipleBitExchanged){
+			return new MultipleBitExchanged(hasMultipleBitExchange());
 		}
 		else{
 			throw new RuntimeException("Unsuported attribute: "+a.toString());

@@ -41,6 +41,7 @@ public abstract class Attribute<T> implements Serializable{
 				new Memory(0l, new KbitsScale()),
 				new CryptoCalls(0, new NoScale<Integer>()),
 				new FinalSlowPhase(false),
+				new MultipleBitExchanged(false),
 				new YearOfPublication(0, new NoScale<Integer>()),
 		};		
 	}
