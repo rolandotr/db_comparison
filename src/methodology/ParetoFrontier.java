@@ -20,10 +20,9 @@ public class ParetoFrontier implements Serializable{
 	private DominantRelationship relationship;
 	
 
-	/*Trujillo- Apr 4, 2014
-	 * This is a private constructor that provides information about a pareto frontier namely: the protocols analyzed, 
-	 * the frontier, and a data structure that details why a protocol does not belong to the pareto frontier.*/
-	private ParetoFrontier(DBProtocol[] protocols, DBProtocol[] frontier, TreeMap<Integer, 
+
+
+	public ParetoFrontier(DBProtocol[] protocols, DBProtocol[] frontier, TreeMap<Integer, 
 			List<Integer>> indexesToBeRemoved, DominantRelationship relationship){
 		this.protocols = protocols;
 		this.frontier = frontier;
@@ -94,6 +93,25 @@ public class ParetoFrontier implements Serializable{
 
 	public DominantRelationship getRelationship() {
 		return relationship;
+	}
+	public void setProtocols(DBProtocol[] protocols) {
+		this.protocols = protocols;
+	}
+
+
+	public void setFrontier(DBProtocol[] frontier) {
+		this.frontier = frontier;
+	}
+
+
+	public void setIndexesToBeRemoved(
+			TreeMap<Integer, List<Integer>> indexesToBeRemoved) {
+		this.indexesToBeRemoved = indexesToBeRemoved;
+	}
+
+
+	public void setRelationship(DominantRelationship relationship) {
+		this.relationship = relationship;
 	}
 
 }

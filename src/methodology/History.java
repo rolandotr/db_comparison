@@ -18,6 +18,8 @@ import attributes.comparators.OrderRelationship;
 import methodology.DominantRelationship;
 import methodology.ParetoFrontier;
 
+/*Trujillo- Apr 16, 2014
+ * Since this class considers the history of the DB protocols, it normally uses the attribute year.*/
 public class History {
 
 	public static final int MAX_N = 128;
@@ -25,15 +27,17 @@ public class History {
 	public static void main(String[] args) throws IOException {
 		
 		//System.setOut(new PrintStream("test_with_128.txt"));
-		System.setOut(new PrintStream("output.txt"));
+		System.setOut(new PrintStream("history.txt"));
 		DBProtocol[] protocols = DBProtocol.loadProtocols();
 		OrderRelationship<Attribute> order = new DefaultOrder();
 		Attribute[] attributes = Attribute.getEmptyAttributesWithScales();
 		
 		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, order, attributes, MAX_N);
 		
-		saveInDiskTheFrontiers(frontiers, "frontiers.obj");		
-		printLatexTable(protocols, order, attributes, frontiers, MAX_N, 0, 8);
+		saveInDiskTheFrontiers(frontiers, "history.obj");
+		
+		
+		printLatexTable(protocols, order, attributes, frontiers, MAX_N, 0, 8, "history_table.tex");
 		printHistory(protocols, order, attributes, frontiers, MAX_N);
 
 		//TreeBasedProtocol tree = new TreeBasedProtocol();
@@ -44,7 +48,7 @@ public class History {
 		//relation.printInfoOfDomination(tree, kim, 63);
 	}
 
-	private static void saveInDiskTheFrontiers(ParetoFrontier[] frontiers,
+	public static void saveInDiskTheFrontiers(ParetoFrontier[] frontiers,
 			String file) throws FileNotFoundException, IOException {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
 		out.writeObject(frontiers);
@@ -75,8 +79,8 @@ public class History {
 	/*Trujillo- Apr 5, 2014
 	 * Print the history in a latex table format*/
 	public static void printLatexTable(DBProtocol[] protocols, OrderRelationship<Attribute> order, 
-			Attribute[] attributes, ParetoFrontier[] frontiers, int maxN, int remains, int module) throws IOException{
-		FileWriter writer = new FileWriter("latex_table.tex");
+			Attribute[] attributes, ParetoFrontier[] frontiers, int maxN, int remains, int module, String name) throws IOException{
+		FileWriter writer = new FileWriter(name);
 		//first, we print the header
 		Latex.appendTableHeader(writer, attributes);		
 		for (int i = 1; i <= maxN; i++) {

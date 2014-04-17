@@ -17,17 +17,18 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 		return ONE_OVER_TWO.pow(n);
 	}
 
-	/*Trujillo- Mar 26, 2014
-	 * There is a flaw in the distance fraud computation of this protocol. Therefore, 
-	 * I assume the worst case, i.e. probability is one*/
+	/*Trujillo- Apr 17, 2014
+	 * An attack shown by Bay et al. 2012 shows that the resistance to terrorist fraud is actually 1*/
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
 		return ONE;
 	}
 
+	/*Trujillo- Apr 17, 2014
+	 * An attack shown by Bay et al. 2012 shows that the resistance to terrorist fraud is actually 1*/
 	@Override
 	public BigDecimal getTerroristFraudProbability(int n) {
-		return THREE_OVER_FOUR.pow(n);
+		return ONE;
 	}
 
 	@Override

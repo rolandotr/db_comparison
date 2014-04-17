@@ -46,6 +46,20 @@ public abstract class Attribute<T> implements Serializable{
 		};		
 	}
 
+	/*Trujillo- Apr 5, 2014
+	 * Attributes with the our scales*/
+	public static Attribute[] getEmptyAttributesNoYearWithScales(){
+		return new Attribute[]{
+				new MafiaFraudProbability(0, new LogScale(2)),
+				new DistanceFraudProbability(0, new LogScale(2)),
+				new TerroristFraudProbability(0, new LogScale(2)),
+				new Memory(0l, new KbitsScale()),
+				new CryptoCalls(0, new NoScale<Integer>()),
+				new FinalSlowPhase(false),
+				new MultipleBitExchanged(false),
+		};		
+	}
+	
 	public abstract String getName();
 
 }
