@@ -73,5 +73,9 @@ public class SwissKnifeProtocol extends DBProtocol{
 	public String getIdentifier() {
 		return "SwissKnife";
 	}
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
 
 }

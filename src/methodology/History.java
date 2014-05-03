@@ -13,9 +13,9 @@ import java.util.List;
 import protocols.DBProtocol;
 import utils.Latex;
 import attributes.Attribute;
-import attributes.comparators.DefaultOrder;
-import attributes.comparators.OrderRelationship;
-import methodology.DominantRelationship;
+import attributes.comparators.DefaultNondominantRelation;
+import attributes.comparators.NondominantRelationship;
+import methodology.ProtocolNonDominantRelationship;
 import methodology.ParetoFrontier;
 
 /*Trujillo- Apr 16, 2014
@@ -29,7 +29,8 @@ public class History {
 		//System.setOut(new PrintStream("test_with_128.txt"));
 		System.setOut(new PrintStream("history.txt"));
 		DBProtocol[] protocols = DBProtocol.loadProtocols();
-		OrderRelationship<Attribute> order = new DefaultOrder();
+		//DBProtocol[] protocols = DBProtocol.loadProtocols(100);
+		NondominantRelationship order = new DefaultNondominantRelation();
 		Attribute[] attributes = Attribute.getEmptyAttributesWithScales();
 		
 		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, order, attributes, MAX_N);
@@ -58,7 +59,7 @@ public class History {
 	/*Trujillo- Apr 4, 2014
 	 * This method takes MAX_N and builds the history from n = 1 to n = MAX_N. This history is basically how the 
 	 * pareto frontier evolves with n.*/
-	public static void printHistory(DBProtocol[] protocols, OrderRelationship<Attribute> order, 
+	public static void printHistory(DBProtocol[] protocols, NondominantRelationship order, 
 			Attribute[] attributes, ParetoFrontier[] frontiers, int maxN){
 		ParetoFrontier before = null;
 		for (int i = 1; i <= maxN; i++) {
@@ -78,7 +79,7 @@ public class History {
 	
 	/*Trujillo- Apr 5, 2014
 	 * Print the history in a latex table format*/
-	public static void printLatexTable(DBProtocol[] protocols, OrderRelationship<Attribute> order, 
+	public static void printLatexTable(DBProtocol[] protocols, NondominantRelationship order, 
 			Attribute[] attributes, ParetoFrontier[] frontiers, int maxN, int remains, int module, String name) throws IOException{
 		FileWriter writer = new FileWriter(name);
 		//first, we print the header
@@ -132,13 +133,13 @@ public class History {
 			System.out.println("Analyzing why protocol: "+p+" is now in");
 			List<Integer> causes = before.getIndexesToBeRemoved().get(indexesIn[i]);
 			System.out.println("First, let see what happened when n = "+(n-1));
-			DominantRelationship previousRelation = before.getRelationship();
+			ProtocolNonDominantRelationship previousRelation = before.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				previousRelation.printInfoOfDomination(cause, p, n-1);
 			}
 			System.out.println("Now, let see what happened when n = "+(n));
-			DominantRelationship currentRelation = current.getRelationship();
+			ProtocolNonDominantRelationship currentRelation = current.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				currentRelation.printInfoOfNonDomination(cause, p, n);
@@ -153,13 +154,13 @@ public class History {
 			System.out.println("Analyzing why protocol: "+p+" is now out");
 			List<Integer> causes = current.getIndexesToBeRemoved().get(indexesOut[i]);
 			System.out.println("First, let see what happened when n = "+(n-1));
-			DominantRelationship previousRelation = before.getRelationship();
+			ProtocolNonDominantRelationship previousRelation = before.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				previousRelation.printInfoOfNonDomination(cause, p, n-1);
 			}
 			System.out.println("Now, let see what happened when n = "+(n));
-			DominantRelationship currentRelation = current.getRelationship();
+			ProtocolNonDominantRelationship currentRelation = current.getRelationship();
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
 				currentRelation.printInfoOfDomination(cause, p, n);

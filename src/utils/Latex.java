@@ -53,7 +53,7 @@ public abstract class Latex {
 		DBProtocol dominating = cluster.get(0);
 		for (int i = 0; i < attributes.length; i++) {
 			Attribute a = dominating.getAttribute(attributes[i], n);
-			writer.append(" & $"+a.getScale().scaleMeaning(a.getValue())+"$ ");			
+			writer.append(" & $"+a.getScale().scaleMeaning(a.getScaledValue())+"$ ");			
 		}
 		writer.append(" \\\\ "+newLine);
 	}

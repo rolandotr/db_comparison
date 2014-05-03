@@ -8,7 +8,7 @@ public interface Scale<T> extends Serializable{
 	
 
 	public T scale(T value);
-	
+
 	public T unScale(T value);
 
 	/*Trujillo- Apr 6, 2014

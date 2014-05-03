@@ -173,4 +173,9 @@ public class TreeBasedProtocol extends DBProtocol{
 		return "Tree-"+depth;
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

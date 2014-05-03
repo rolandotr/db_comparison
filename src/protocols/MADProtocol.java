@@ -80,4 +80,9 @@ public class MADProtocol extends DBProtocol{
 		return 2003;
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

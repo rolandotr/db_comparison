@@ -108,4 +108,9 @@ public class KimAndAvoineProtocol extends DBProtocol{
 		return 2011;
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

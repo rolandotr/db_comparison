@@ -16,11 +16,11 @@ public class LogScale implements Scale<Double>{
 	}
 	
 	/*Trujillo- Mar 24, 2014
-	 * We return the smallest integer that is closer to the logarithmic of the value*/
+	 * We return the largest integer that is closer to the logarithmic of the value*/
 	public Double scale(Double value) {
 		double num = Math.log(value);
 		double den = Math.log(base);
-		return Math.floor(num/den);
+		return Math.ceil(num/den);
 	}
 	
 	public static void main(String[] args) {

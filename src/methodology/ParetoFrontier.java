@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 import attributes.Attribute;
-import attributes.comparators.DefaultOrder;
-import attributes.comparators.OrderRelationship;
+import attributes.comparators.DefaultNondominantRelation;
+import attributes.comparators.NondominantRelationship;
 import protocols.DBProtocol;
 
 public class ParetoFrontier implements Serializable{
@@ -17,13 +17,13 @@ public class ParetoFrontier implements Serializable{
 	private DBProtocol[] protocols;
 	private DBProtocol[] frontier;
 	private TreeMap<Integer, List<Integer>> indexesToBeRemoved;
-	private DominantRelationship relationship;
+	private ProtocolNonDominantRelationship relationship;
 	
 
 
 
 	public ParetoFrontier(DBProtocol[] protocols, DBProtocol[] frontier, TreeMap<Integer, 
-			List<Integer>> indexesToBeRemoved, DominantRelationship relationship){
+			List<Integer>> indexesToBeRemoved, ProtocolNonDominantRelationship relationship){
 		this.protocols = protocols;
 		this.frontier = frontier;
 		this.indexesToBeRemoved = indexesToBeRemoved;
@@ -33,8 +33,8 @@ public class ParetoFrontier implements Serializable{
 	
 	/*Trujillo- Apr 4, 2014
 	 * Compute the pareto frontier according to some attributes and order*/
-	public static ParetoFrontier computeParetoFrontier(DBProtocol[] protocols, OrderRelationship<Attribute> order, Attribute[] attributes, int n){
-		DominantRelationship relationship = new DominantRelationship(order, protocols, attributes, n);
+	public static ParetoFrontier computeParetoFrontier(DBProtocol[] protocols, NondominantRelationship order, Attribute[] attributes, int n){
+		ProtocolNonDominantRelationship relationship = new ProtocolNonDominantRelationship(attributes);
 		TreeMap<Integer, List<Integer>> indexesToBeRemoved = new TreeMap<>();
 		for (int i = 0; i < protocols.length; i++) {
 			for (int j = 0; j < protocols.length; j++) {
@@ -61,7 +61,7 @@ public class ParetoFrontier implements Serializable{
 		return new ParetoFrontier(protocols, result, indexesToBeRemoved, relationship);
 	}
 	
-	public static ParetoFrontier[] computeAllParetoFrontiers(DBProtocol[] protocols, OrderRelationship<Attribute> order, Attribute[] attributes, int maxN){
+	public static ParetoFrontier[] computeAllParetoFrontiers(DBProtocol[] protocols, NondominantRelationship order, Attribute[] attributes, int maxN){
 		ParetoFrontier[] result = new ParetoFrontier[maxN];
 		for (int i = 1; i <= maxN; i++) {
 			result[i-1] = computeParetoFrontier(protocols, order, attributes, i);
@@ -73,7 +73,7 @@ public class ParetoFrontier implements Serializable{
 	 * Here the protocols are defined in the class DBprotocols, and the order is the default order*/
 	public static ParetoFrontier computeParetoFrontier(int factor, Attribute[] attributes, int n){
 		DBProtocol[] protocols = DBProtocol.loadProtocols(factor);
-		OrderRelationship<Attribute> order = new DefaultOrder();
+		NondominantRelationship order = new DefaultNondominantRelation();
 		return computeParetoFrontier(protocols, order, attributes, n);
 	}
 	
@@ -91,7 +91,7 @@ public class ParetoFrontier implements Serializable{
 		return indexesToBeRemoved;
 	}
 
-	public DominantRelationship getRelationship() {
+	public ProtocolNonDominantRelationship getRelationship() {
 		return relationship;
 	}
 	public void setProtocols(DBProtocol[] protocols) {
@@ -110,7 +110,7 @@ public class ParetoFrontier implements Serializable{
 	}
 
 
-	public void setRelationship(DominantRelationship relationship) {
+	public void setRelationship(ProtocolNonDominantRelationship relationship) {
 		this.relationship = relationship;
 	}
 

@@ -78,4 +78,9 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 		return 1993;
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

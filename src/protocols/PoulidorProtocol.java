@@ -154,4 +154,9 @@ public class PoulidorProtocol extends DBProtocol{
 		return "Poulidor";
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

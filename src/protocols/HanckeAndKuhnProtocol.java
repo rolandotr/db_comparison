@@ -74,4 +74,9 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 		return 2005;
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

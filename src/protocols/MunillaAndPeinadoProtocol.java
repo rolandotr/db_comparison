@@ -121,4 +121,9 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 		return "MP-"+pf;
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

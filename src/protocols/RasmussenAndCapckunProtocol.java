@@ -90,4 +90,9 @@ public class RasmussenAndCapckunProtocol extends DBProtocol{
 		return "RC";
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
+	}
+
 }

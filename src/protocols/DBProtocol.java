@@ -9,6 +9,7 @@ import attributes.Attribute;
 import attributes.CryptoCalls;
 import attributes.DistanceFraudProbability;
 import attributes.FinalSlowPhase;
+import attributes.LackOfSecurityProof;
 import attributes.MafiaFraudProbability;
 import attributes.Memory;
 import attributes.MultipleBitExchanged;
@@ -45,6 +46,8 @@ public abstract class DBProtocol implements Serializable{
 	public abstract boolean hasFinalSlowPhase();
 	
 	public abstract boolean hasMultipleBitExchange();
+
+	public abstract boolean lackSecurityProof();
 	
 	public abstract int getYearOfPublication();
 	
@@ -120,6 +123,9 @@ public abstract class DBProtocol implements Serializable{
 		}
 		else if (a instanceof MultipleBitExchanged){
 			return new MultipleBitExchanged(hasMultipleBitExchange());
+		}
+		else if (a instanceof LackOfSecurityProof){
+			return new LackOfSecurityProof(lackSecurityProof());
 		}
 		else{
 			throw new RuntimeException("Unsuported attribute: "+a.toString());

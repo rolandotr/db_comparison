@@ -17,15 +17,13 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 		return ONE_OVER_TWO.pow(n);
 	}
 
-	/*Trujillo- Apr 17, 2014
-	 * An attack shown by Bay et al. 2012 shows that the resistance to terrorist fraud is actually 1*/
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
-		return ONE;
+		return ONE_OVER_TWO.pow(n);
 	}
 
 	/*Trujillo- Apr 17, 2014
-	 * An attack shown by Bay et al. 2012 shows that the resistance to terrorist fraud is actually 1*/
+	 * An attack shown by Avoine et al. 2011 shows that the resistance to terrorist fraud is actually 1*/
 	@Override
 	public BigDecimal getTerroristFraudProbability(int n) {
 		return ONE;
@@ -72,6 +70,10 @@ public class BussardAndBaggaProtocol extends DBProtocol{
 	@Override
 	public int getYearOfPublication() {
 		return 2005;
+	}
+	@Override
+	public boolean lackSecurityProof() {
+		return true;
 	}
 
 }

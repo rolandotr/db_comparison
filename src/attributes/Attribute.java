@@ -15,14 +15,20 @@ public abstract class Attribute<T> implements Serializable{
 	
 	protected Scale<T> scale;
 	protected T value;
+	protected T scaledValue;
 	
 	public Attribute(T value, Scale<T> scale){
 		this.scale = scale;
-		this.value = scale.scale(value);
+		this.value = value;
+		this.scaledValue = scale.scale(value);
 	}
 	
 	public T getValue(){
 		return value;
+	}
+	
+	public T getScaledValue(){
+		return scaledValue;
 	}
 	
 	public Scale<T> getScale() {
@@ -42,6 +48,7 @@ public abstract class Attribute<T> implements Serializable{
 				new CryptoCalls(0, new NoScale<Integer>()),
 				new FinalSlowPhase(false),
 				new MultipleBitExchanged(false),
+				new LackOfSecurityProof(true),
 				new YearOfPublication(0, new NoScale<Integer>()),
 		};		
 	}
@@ -49,13 +56,14 @@ public abstract class Attribute<T> implements Serializable{
 	/*Trujillo- Apr 5, 2014
 	 * Attributes with the our scales*/
 	public static Attribute[] getEmptyAttributesNoYearWithScales(){
-		return new Attribute[]{
+		return  new Attribute[]{
 				new MafiaFraudProbability(0, new LogScale(2)),
 				new DistanceFraudProbability(0, new LogScale(2)),
 				new TerroristFraudProbability(0, new LogScale(2)),
 				new Memory(0l, new KbitsScale()),
 				new CryptoCalls(0, new NoScale<Integer>()),
 				new FinalSlowPhase(false),
+				//new LackOfSecurityProof(true),
 				new MultipleBitExchanged(false),
 		};		
 	}

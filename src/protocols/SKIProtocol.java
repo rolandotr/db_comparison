@@ -113,5 +113,10 @@ public class SKIProtocol extends DBProtocol{
 		return "SKI-"+t;
 	}
 
+	@Override
+	public boolean lackSecurityProof() {
+		return false;
+	}
+
 	
 }
