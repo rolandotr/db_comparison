@@ -28,7 +28,7 @@ public class History {
 		
 		//System.setOut(new PrintStream("test_with_128.txt"));
 		System.setOut(new PrintStream("history.txt"));
-		DBProtocol[] protocols = DBProtocol.loadProtocols();
+		DBProtocol[] protocols = DBProtocol.loadProtocols(MAX_N*2);
 		//DBProtocol[] protocols = DBProtocol.loadProtocols(100);
 		NondominantRelationship order = new DefaultNondominantRelation();
 		Attribute[] attributes = Attribute.getEmptyAttributesWithScales();
@@ -61,7 +61,8 @@ public class History {
 	 * pareto frontier evolves with n.*/
 	public static void printHistory(DBProtocol[] protocols, NondominantRelationship order, 
 			Attribute[] attributes, ParetoFrontier[] frontiers, int maxN){
-		ParetoFrontier before = null;
+		
+		ParetoFrontier before = new ParetoFrontier(protocols, protocols, null, frontiers[0].getRelationship());
 		for (int i = 1; i <= maxN; i++) {
 			System.out.println("Computing pareto frontier for n = "+i);
 			System.out.println("");

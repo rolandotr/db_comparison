@@ -73,7 +73,8 @@ public class KimAndAvoineProtocol extends DBProtocol{
 	}
 
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
 		double pd = 0;
 		DBProtocol[] result = new DBProtocol[factor+1];
 		for (int i = 0; i <= factor; i++) {
@@ -87,7 +88,8 @@ public class KimAndAvoineProtocol extends DBProtocol{
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e < 2) return null;
 		return new DBProtocol[]{
 				new KimAndAvoineProtocol(0, SIZE_OF_NONCES),
 				new KimAndAvoineProtocol(0.2, SIZE_OF_NONCES),

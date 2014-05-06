@@ -89,23 +89,54 @@ public class SKIProtocol extends DBProtocol{
 	}
 
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
-		DBProtocol[] result = new DBProtocol[factor];
-		for (int i = 1; i <= factor; i++) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
+		int max = (e/2 > factor)?factor:e/2;
+		DBProtocol[] result = new DBProtocol[max];
+		for (int i = 1; i <= max; i++) {
 			result[i-1] = new SKIProtocol(i, SIZE_OF_NONCES);
 		}
 		return result;
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
-		return new DBProtocol[]{
-				new SKIProtocol(2, SIZE_OF_NONCES),
-				new SKIProtocol(3, SIZE_OF_NONCES),
-				new SKIProtocol(4, SIZE_OF_NONCES),
-				new SKIProtocol(8, SIZE_OF_NONCES),
-				new SKIProtocol(12, SIZE_OF_NONCES),
-		};
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e >= 24){
+			return new DBProtocol[]{
+					new SKIProtocol(2, SIZE_OF_NONCES),
+					new SKIProtocol(3, SIZE_OF_NONCES),
+					new SKIProtocol(4, SIZE_OF_NONCES),
+					new SKIProtocol(8, SIZE_OF_NONCES),
+					new SKIProtocol(12, SIZE_OF_NONCES),
+			};
+		}
+		else if (e >= 16){
+			return new DBProtocol[]{
+					new SKIProtocol(2, SIZE_OF_NONCES),
+					new SKIProtocol(3, SIZE_OF_NONCES),
+					new SKIProtocol(4, SIZE_OF_NONCES),
+					new SKIProtocol(8, SIZE_OF_NONCES),
+			};
+		}
+		if (e >= 8){
+			return new DBProtocol[]{
+					new SKIProtocol(2, SIZE_OF_NONCES),
+					new SKIProtocol(3, SIZE_OF_NONCES),
+					new SKIProtocol(4, SIZE_OF_NONCES),
+			};
+		}
+		if (e >= 6){
+			return new DBProtocol[]{
+					new SKIProtocol(2, SIZE_OF_NONCES),
+					new SKIProtocol(3, SIZE_OF_NONCES),
+			};
+		}
+		if (e >= 4){
+			return new DBProtocol[]{
+					new SKIProtocol(2, SIZE_OF_NONCES),
+			};
+		}
+		else return null;
 	}
 
 	@Override

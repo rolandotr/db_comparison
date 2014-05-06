@@ -69,5 +69,15 @@ public abstract class Attribute<T> implements Serializable{
 	}
 	
 	public abstract String getName();
+	
+	/*
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Attribute){
+			Attribute tmp = (Attribute)obj;
+			return tmp.getName().equals(this.getName()) && 
+		}
+	}
+	*/
 
 }

@@ -61,12 +61,14 @@ public class MADProtocol extends DBProtocol{
 		return 4;
 	}
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new MADProtocol(SIZE_OF_NONCES, SIZE_OF_MAC, SIZE_OF_SECRET)};
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new MADProtocol(SIZE_OF_NONCES, SIZE_OF_MAC, SIZE_OF_SECRET)};
 	}
 

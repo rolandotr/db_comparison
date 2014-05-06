@@ -59,12 +59,14 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 	}
 
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new BrandsAndChaumProtocol()};
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new BrandsAndChaumProtocol()};
 	}
 

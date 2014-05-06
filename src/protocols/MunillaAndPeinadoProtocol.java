@@ -31,25 +31,12 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getMafiaFraudProbability(int n) {
-		BigDecimal blackBoxPreAsk;
-		if (pf < (double)(4)/7){
-			BigDecimal tmp = new BigDecimal(pf+"");
-			tmp = tmp.negate();
-			tmp = ONE.add(tmp);
-			blackBoxPreAsk = tmp.pow(n);
-		}
-		else{
-			BigDecimal tmp = new BigDecimal(pf+"");
-			tmp = THREE_OVER_FOUR.multiply(tmp);
-			blackBoxPreAsk = tmp.pow(n);
-		}
 		BigDecimal blackBoxPostAsk;
 		BigDecimal tmp = new BigDecimal((pf/2)+"");
 		tmp = tmp.negate();
 		tmp = ONE.add(tmp);
 		blackBoxPostAsk = tmp.pow(n);
-		if (blackBoxPreAsk.compareTo(blackBoxPostAsk) >= 0) return blackBoxPreAsk;
-		else return blackBoxPostAsk;
+		return blackBoxPostAsk;
 	}
 
 	@Override
@@ -91,7 +78,8 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 	}
 
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
 		double pf = 0;
 		DBProtocol[] result = new DBProtocol[factor+1];
 		for (int i = 0; i <= factor; i++) {
@@ -105,7 +93,8 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e < 2) return null;
 		return new DBProtocol[]{
 				new MunillaAndPeinadoProtocol(0, SIZE_OF_NONCES),
 				new MunillaAndPeinadoProtocol(0.2, SIZE_OF_NONCES),

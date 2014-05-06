@@ -71,11 +71,11 @@ public abstract class DBProtocol implements Serializable{
 	/*Trujillo- Mar 24, 2014
 	 * The factor represents the maximum number of parameter values that should be considered.
 	 * Consequently, if a protocol has k parameters, it has, at most, k^factor different instances.*/
-	public abstract DBProtocol[] getAllInstances(int factor);
+	public abstract DBProtocol[] getAllInstances(int e, int factor);
 	
 	/*Trujillo- Apr 5, 2014
 	 * Predefined instances of the protocol*/
-	public abstract DBProtocol[] getDefaultInstances();
+	public abstract DBProtocol[] getDefaultInstances(int e);
 	
 	/*Trujillo- Mar 25, 2014
 	 * The identifier should uniquely identify the protocols even if the protocol
@@ -137,40 +137,40 @@ public abstract class DBProtocol implements Serializable{
 	 * The protocols to be loaded. Note that for each it might be several settings. The number of settings is bounded
 	 * by factor^m where m is the number of parameters that can be changed. Also note that the number of rounds is not
 	 * a parameter.*/
-	public static DBProtocol[] loadProtocols(int factor) {
+	public static DBProtocol[] loadProtocols(int e, int factor) {
 		List<DBProtocol[]> protocols = new LinkedList<>();
 		int length = 0;
-		DBProtocol[] tmp = new BrandsAndChaumProtocol().getAllInstances(factor);
+		DBProtocol[] tmp = new BrandsAndChaumProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new BussardAndBaggaProtocol().getAllInstances(factor);
+		tmp = new BussardAndBaggaProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new HanckeAndKuhnProtocol().getAllInstances(factor);
+		tmp = new HanckeAndKuhnProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new KimAndAvoineProtocol().getAllInstances(factor);
+		tmp = new KimAndAvoineProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new MADProtocol().getAllInstances(factor);
+		tmp = new MADProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new MunillaAndPeinadoProtocol().getAllInstances(factor);
+		tmp = new MunillaAndPeinadoProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new PoulidorProtocol().getAllInstances(factor);
+		tmp = new PoulidorProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new RasmussenAndCapckunProtocol().getAllInstances(factor);
+		tmp = new RasmussenAndCapckunProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new SKIProtocol().getAllInstances(factor);
+		tmp = new SKIProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new SwissKnifeProtocol().getAllInstances(factor);
+		tmp = new SwissKnifeProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new TreeBasedProtocol().getAllInstances(factor);
+		tmp = new TreeBasedProtocol().getAllInstances(e, factor);
 		length += tmp.length;
 		protocols.add(tmp);
 		DBProtocol[] result = new DBProtocol[length];
@@ -186,40 +186,40 @@ public abstract class DBProtocol implements Serializable{
 	
 	/*Trujillo- Apr 5, 2014
 	 * This load protocols with default parameters*/
-	public static DBProtocol[] loadProtocols() {
+	public static DBProtocol[] loadProtocols(int e) {
 		List<DBProtocol[]> protocols = new LinkedList<>();
 		int length = 0;
-		DBProtocol[] tmp = new BrandsAndChaumProtocol().getDefaultInstances();
+		DBProtocol[] tmp = new BrandsAndChaumProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new BussardAndBaggaProtocol().getDefaultInstances();
+		tmp = new BussardAndBaggaProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new HanckeAndKuhnProtocol().getDefaultInstances();
+		tmp = new HanckeAndKuhnProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new KimAndAvoineProtocol().getDefaultInstances();
+		tmp = new KimAndAvoineProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new MADProtocol().getDefaultInstances();
+		tmp = new MADProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new MunillaAndPeinadoProtocol().getDefaultInstances();
+		tmp = new MunillaAndPeinadoProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new PoulidorProtocol().getDefaultInstances();
+		tmp = new PoulidorProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new RasmussenAndCapckunProtocol().getDefaultInstances();
+		tmp = new RasmussenAndCapckunProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new SKIProtocol().getDefaultInstances();
+		tmp = new SKIProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new SwissKnifeProtocol().getDefaultInstances();
+		tmp = new SwissKnifeProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new TreeBasedProtocol().getDefaultInstances();
+		tmp = new TreeBasedProtocol().getDefaultInstances(e);
 		length += tmp.length;
 		protocols.add(tmp);
 		DBProtocol[] result = new DBProtocol[length];

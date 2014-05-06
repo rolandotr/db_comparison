@@ -148,24 +148,63 @@ public class TreeBasedProtocol extends DBProtocol{
 	/*Trujillo- Mar 25, 2014
 	 * depth = 0 is the first of them. After that we take 1, 2, 4, etc*/
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
-		DBProtocol[] result = new DBProtocol[factor];
-		for (int i = 0; i < factor; i++) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
+		int max = (e/2 >= factor)?factor:e/2;
+		DBProtocol[] result = new DBProtocol[max];
+		for (int i = 0; i < max; i++) {
 			result[i] = new TreeBasedProtocol(i, SIZE_OF_NONCES);
 		}
 		return result;
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
-		return new DBProtocol[]{
-				new TreeBasedProtocol(0, SIZE_OF_NONCES),
-				new TreeBasedProtocol(2, SIZE_OF_NONCES),
-				new TreeBasedProtocol(4, SIZE_OF_NONCES),
-				new TreeBasedProtocol(6, SIZE_OF_NONCES),
-				new TreeBasedProtocol(8, SIZE_OF_NONCES),
-				new TreeBasedProtocol(12, SIZE_OF_NONCES),
-		};
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e >= 24){
+			return new DBProtocol[]{
+					new TreeBasedProtocol(0, SIZE_OF_NONCES),
+					new TreeBasedProtocol(2, SIZE_OF_NONCES),
+					new TreeBasedProtocol(4, SIZE_OF_NONCES),
+					new TreeBasedProtocol(6, SIZE_OF_NONCES),
+					new TreeBasedProtocol(8, SIZE_OF_NONCES),
+					new TreeBasedProtocol(12, SIZE_OF_NONCES),
+			};
+		}
+		if (e >= 16){
+			return new DBProtocol[]{
+					new TreeBasedProtocol(0, SIZE_OF_NONCES),
+					new TreeBasedProtocol(2, SIZE_OF_NONCES),
+					new TreeBasedProtocol(4, SIZE_OF_NONCES),
+					new TreeBasedProtocol(6, SIZE_OF_NONCES),
+					new TreeBasedProtocol(8, SIZE_OF_NONCES),
+			};
+		}
+		if (e >= 12){
+			return new DBProtocol[]{
+					new TreeBasedProtocol(0, SIZE_OF_NONCES),
+					new TreeBasedProtocol(2, SIZE_OF_NONCES),
+					new TreeBasedProtocol(4, SIZE_OF_NONCES),
+					new TreeBasedProtocol(6, SIZE_OF_NONCES),
+			};
+		}
+		if (e >= 8){
+			return new DBProtocol[]{
+					new TreeBasedProtocol(0, SIZE_OF_NONCES),
+					new TreeBasedProtocol(2, SIZE_OF_NONCES),
+					new TreeBasedProtocol(4, SIZE_OF_NONCES),
+			};
+		}
+		if (e >= 4){
+			return new DBProtocol[]{
+					new TreeBasedProtocol(0, SIZE_OF_NONCES),
+					new TreeBasedProtocol(2, SIZE_OF_NONCES),
+			};
+		}
+		else {
+			return new DBProtocol[]{
+					new TreeBasedProtocol(0, SIZE_OF_NONCES),
+			};
+		}
 	}
 
 	@Override

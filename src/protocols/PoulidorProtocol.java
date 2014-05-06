@@ -116,7 +116,7 @@ public class PoulidorProtocol extends DBProtocol{
 
 	@Override
 	public boolean hasFinalSlowPhase() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -140,12 +140,14 @@ public class PoulidorProtocol extends DBProtocol{
 	}
 
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new PoulidorProtocol()};
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new PoulidorProtocol()};
 	}
 

@@ -55,12 +55,14 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 		return 1;
 	}
 	@Override
-	public DBProtocol[] getAllInstances(int factor) {
+	public DBProtocol[] getAllInstances(int e, int factor) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new HanckeAndKuhnProtocol()};
 	}
 
 	@Override
-	public DBProtocol[] getDefaultInstances() {
+	public DBProtocol[] getDefaultInstances(int e) {
+		if (e < 2) return null;
 		return new DBProtocol[]{new HanckeAndKuhnProtocol()};
 	}
 
