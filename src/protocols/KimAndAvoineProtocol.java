@@ -37,9 +37,9 @@ public class KimAndAvoineProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
+		int alpha = (int)(n*pd);
 		BigDecimal a = new BigDecimal("0.75");
-		BigDecimal b = new BigDecimal(""+pd/4);
-		return (a.add(b)).pow(n);
+		return a.pow(n-alpha);
 	}
 
 	@Override

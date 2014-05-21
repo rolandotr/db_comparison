@@ -4,9 +4,16 @@ import java.math.BigDecimal;
 
 public class BussardAndBaggaProtocol extends DBProtocol{
 
-	public BussardAndBaggaProtocol(){
-		
+	
+	protected int sizeOfCommit;
+	
+	public BussardAndBaggaProtocol(int sizeOfCommit){
+		this.sizeOfCommit = sizeOfCommit;
 	}
+	public BussardAndBaggaProtocol(){	
+		this(SIZE_OF_COMMIT);
+	}
+	
 	@Override
 	public String getAcronym() {
 		return "DBPK-Log";

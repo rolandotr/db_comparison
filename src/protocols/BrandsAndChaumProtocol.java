@@ -55,7 +55,7 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 
 	@Override
 	public int getTotalBitsExchanged(int n) {
-		return 2*sizeOfCommit+n;
+		return 2*sizeOfCommit;
 	}
 
 	@Override

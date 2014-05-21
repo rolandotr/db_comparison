@@ -6,10 +6,15 @@ public class SKIProtocol extends DBProtocol{
 
 	private int t; 
 	private int sizeOfNonces;
+	private int q;
 	
-	public SKIProtocol(int t, int sizeOfNonces){
+	public SKIProtocol(int t, int q, int sizeOfNonces){
 		this.t = t;
 		this.sizeOfNonces = sizeOfNonces;
+		this.q = q;
+	}
+	public SKIProtocol(int t, int sizeOfNonces){
+		this(t, 2, sizeOfNonces);
 	}
 	
 	public SKIProtocol(){
@@ -29,8 +34,7 @@ public class SKIProtocol extends DBProtocol{
 	@Override
 	public BigDecimal getMafiaFraudProbability(int n) {
 		n = getFairNumberOfRounds(n, t);
-		double q = 2;
-		double tmp = (q+t-1)/(q*t);
+		double tmp = ((double)(q+t-1))/(q*t);
 		BigDecimal result = new BigDecimal(""+tmp);
 		return result.pow(n);
 	}
@@ -47,10 +51,9 @@ public class SKIProtocol extends DBProtocol{
 	 * Again, as in mafia fraud, we take q = 2*/
 	@Override
 	public BigDecimal getTerroristFraudProbability(int n) {
-		if (t <= 2) return ONE;
+		//if (t <= 2) return ONE;
 		n = getFairNumberOfRounds(n, t);
-		double q = 2;
-		double tmp = (q*t+2*(1-q))/(q*t);
+		double tmp = ((double)(q*t+2*(1-q)))/(q*t);
 		BigDecimal result = new BigDecimal(""+tmp);
 		return result.pow(n);
 	}

@@ -36,6 +36,19 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 		tmp = tmp.negate();
 		tmp = ONE.add(tmp);
 		blackBoxPostAsk = tmp.pow(n);
+		BigDecimal preAsk;
+		if (pf < ((double)4)/7){
+			tmp = new BigDecimal((pf)+"");
+			tmp = tmp.negate();
+			tmp = ONE.add(tmp);
+			preAsk = tmp.pow(n);
+		}
+		else{
+			tmp = new BigDecimal((pf)+"");
+			tmp = tmp.multiply(THREE_OVER_FOUR);
+			preAsk = tmp.pow(n);
+		}
+		if (preAsk.compareTo(blackBoxPostAsk) < 0) return preAsk;
 		return blackBoxPostAsk;
 	}
 
@@ -59,7 +72,7 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 
 	@Override
 	public int getTotalBitsExchanged(int n) {
-		return 2*sizeOfNonces+3*n;
+		return 2*sizeOfNonces;
 	}
 
 	@Override
@@ -69,7 +82,7 @@ public class MunillaAndPeinadoProtocol extends DBProtocol{
 
 	@Override
 	public long getMemory(int n) {
-		return getTotalBitsExchanged(n)+2*n;
+		return getTotalBitsExchanged(n)+3*n;
 	}
 
 	@Override

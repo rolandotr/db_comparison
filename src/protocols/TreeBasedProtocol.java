@@ -11,10 +11,24 @@ public class TreeBasedProtocol extends DBProtocol{
 	/*Trujillo- Mar 7, 2014
 	 * This value define the depth of the trees. When depth = 0, a single tree
 	 * is assumed. Otherwise, n/depth trees are considered*/
-	private int depth;
+	NumberOfTrees treeFunction;
 	
-	public TreeBasedProtocol(int depth, int sizeOfNonces){
-		this.depth = depth;
+	public TreeBasedProtocol(final int depth, int sizeOfNonces){
+		treeFunction = new NumberOfTrees(){
+			@Override
+			public int getNumberOfTrees(int n) {
+				return depth;
+			}
+			@Override
+			public String getName() {
+				return ""+depth;
+			}
+		};
+		this.sizeOfNonces = sizeOfNonces;
+	}
+
+	public TreeBasedProtocol(NumberOfTrees treeFunction, int sizeOfNonces){
+		this.treeFunction = treeFunction;
 		this.sizeOfNonces = sizeOfNonces;
 	}
 
@@ -29,7 +43,7 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getMafiaFraudProbability(int n) {
-		if (depth >= n) return ONE;//because this is not the correct protocol for this n, but depth = 0.
+		int depth = treeFunction.getNumberOfTrees(n);
 		if (depth == 0) return computeMyFar(n);
 		int realDepth = (depth > n)?n:depth;
 		BigDecimal p = computeMyFar(realDepth);
@@ -63,7 +77,7 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getDistanceFraudProbability(int n) {
-		if (depth >= n) return ONE;//because this is not the correct protocol for this n, but depth = 0.
+		int depth = treeFunction.getNumberOfTrees(n);
 		int realDepth = (depth > n)?n:depth;
 		if (realDepth == 4)
 			return new BigDecimal(Math.pow(0.28, n/4));
@@ -118,10 +132,11 @@ public class TreeBasedProtocol extends DBProtocol{
 	@Override
 	public long getMemory(int n) {
 		//System.out.println("Depth = "+depth+", n = "+n);
+		int depth = treeFunction.getNumberOfTrees(n);
 		if (depth == 0){
 			BigInteger tmp = new BigInteger(2+"");
 			tmp = tmp.pow(n+1);
-			tmp = tmp.add(new BigInteger((getTotalBitsExchanged(n)-2)+""));
+			tmp = tmp.add(new BigInteger((getTotalBitsExchanged(n))+""));
 			//dealing with numerical errors
 			if (tmp.bitLength() > 63) return Long.MAX_VALUE;
 			return tmp.longValue();
@@ -209,12 +224,18 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	@Override
 	public String getIdentifier() {
-		return "Tree-"+depth;
+		String depthName = treeFunction.getName();
+		return "Tree-"+depthName;
 	}
 
 	@Override
 	public boolean lackSecurityProof() {
 		return true;
+	}
+	
+	public interface NumberOfTrees{
+		public int getNumberOfTrees(int n);
+		public String getName();
 	}
 
 }

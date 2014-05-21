@@ -63,7 +63,7 @@ public abstract class DBProtocol implements Serializable{
 	 * challenge response during the fast phase. This method is implemented
 	 * to solve this issue.*/
 	public int getFairNumberOfRounds(int n, int size){
-		return n/size;
+		return n/(size-1);
 	}
 	
 	public abstract int getTotalBitsExchanged(int n);
