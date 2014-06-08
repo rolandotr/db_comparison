@@ -1,7 +1,7 @@
 package tests;
 
-import protocols.PoulidorDistanceFraudSimulator;
-import protocols.PoulidorProtocol;
+import protocols.specifications.PoulidorDistanceFraudSimulator;
+import protocols.specifications.PoulidorProtocol;
 
 
 public class PoulidorDistanceFraudSimulatorTest {
@@ -20,8 +20,9 @@ public class PoulidorDistanceFraudSimulatorTest {
 		PoulidorProtocol pro = new PoulidorProtocol(0);
 		int n = 128;
 		for (int i = 1; i <= n; i++) {
-			double mafia = pro.getMafiaFraudProbability(i).doubleValue();
-			double distance = pro.getDistanceFraudProbability(i).doubleValue();
+			pro.setNumberOfRounds(i);
+			double mafia = pro.getMafiaFraudProbability().doubleValue();
+			double distance = pro.getDistanceFraudProbability().doubleValue();
 			System.out.println("n = "+i+" : mafia = "+mafia+" : distance = "+distance);
 		}
 	}

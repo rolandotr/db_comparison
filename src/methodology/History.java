@@ -10,36 +10,57 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import protocols.DBProtocol;
+import protocols.specifications.DBProtocol;
+
 import utils.Latex;
 import attributes.Attribute;
-import attributes.comparators.DefaultNondominantRelation;
-import attributes.comparators.NondominantRelationship;
-import methodology.ProtocolNonDominantRelationship;
+import attributes.CryptoCalls;
+import attributes.DistanceFraudProbability;
+import attributes.FinalSlowPhase;
+import attributes.MafiaFraudProbability;
+import attributes.Memory;
+import attributes.NumberOfRounds;
+import attributes.SizeOfMessages;
+import attributes.TerroristFraudProbability;
+import attributes.YearOfPublication;
+import attributes.relations.FinalSlowPhaseRelation;
+import attributes.relations.IntegerRelation;
+import attributes.relations.MemoryRelation;
+import attributes.relations.ProbabilityRelation;
+import attributes.relations.SizeOfMessagesRelation;
+import attributes.scales.KbitsScale;
+import attributes.scales.LogScale;
+import attributes.scales.NoScale;
 import methodology.ParetoFrontier;
 
 /*Trujillo- Apr 16, 2014
  * Since this class considers the history of the DB protocols, it normally uses the attribute year.*/
 public class History {
 
-	public static final int MAX_N = 128;
 
 	public static void main(String[] args) throws IOException {
 		
-		//System.setOut(new PrintStream("test_with_128.txt"));
 		System.setOut(new PrintStream("history.txt"));
-		DBProtocol[] protocols = DBProtocol.loadProtocols(MAX_N*2);
-		//DBProtocol[] protocols = DBProtocol.loadProtocols(100);
-		NondominantRelationship order = new DefaultNondominantRelation();
-		Attribute[] attributes = Attribute.getEmptyAttributesWithScales();
+		DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
+		Attribute[] attributes = new Attribute[]{
+				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new NumberOfRounds(new IntegerRelation(), new NoScale<Integer>()),
+				new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
+				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
+				new Memory(new MemoryRelation(), new KbitsScale()),
+				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
+				new YearOfPublication(new IntegerRelation(), new NoScale<Integer>()),
+		};
 		
-		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, order, attributes, MAX_N);
+		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
 		
 		saveInDiskTheFrontiers(frontiers, "history.obj");
 		
 		
-		printLatexTable(protocols, order, attributes, frontiers, MAX_N, 0, 8, "history_table.tex");
-		printHistory(protocols, order, attributes, frontiers, MAX_N);
+		//printLatexTable(protocols, attributes, frontiers, 0, 8, "history_table.tex");
+		//printHistory(protocols, attributes, frontiers);
 
 		//TreeBasedProtocol tree = new TreeBasedProtocol();
 		//System.out.println(tree.getMemory(63));
@@ -59,37 +80,42 @@ public class History {
 	/*Trujillo- Apr 4, 2014
 	 * This method takes MAX_N and builds the history from n = 1 to n = MAX_N. This history is basically how the 
 	 * pareto frontier evolves with n.*/
-	public static void printHistory(DBProtocol[] protocols, NondominantRelationship order, 
-			Attribute[] attributes, ParetoFrontier[] frontiers, int maxN){
+	public static void printHistory(DBProtocol[][] protocols,  
+			Attribute[] attributes, ParetoFrontier[] frontiers){
 		
-		ParetoFrontier before = new ParetoFrontier(protocols, protocols, null, frontiers[0].getRelationship());
-		for (int i = 1; i <= maxN; i++) {
-			System.out.println("Computing pareto frontier for n = "+i);
+		ParetoFrontier before = null;
+		for (int i = 0; i < protocols.length; i++) {
+			//System.out.println("Computing pareto frontier for e = "+i);
 			System.out.println("");
-			ParetoFrontier frontier = frontiers[i-1];
+			ParetoFrontier frontier = frontiers[i];
 			System.out.println("");
+			
 			if (before != null){
-				basicInfo(frontier.getFrontier(), before.getFrontier(), i);
+				basicInfo(frontier.getFrontier(), before.getFrontier());
 				System.out.println("");
-				provideReasons(frontier, before, i);			
+				provideReasons(frontier, before, attributes);			
 				System.out.println("");
-			}
+			}else 
+				basicInfo(frontier.getFrontier()); 
 			before = frontier;
 		}
 	}
 	
 	/*Trujillo- Apr 5, 2014
 	 * Print the history in a latex table format*/
-	public static void printLatexTable(DBProtocol[] protocols, NondominantRelationship order, 
-			Attribute[] attributes, ParetoFrontier[] frontiers, int maxN, int remains, int module, String name) throws IOException{
+	public static void printLatexTable(ParetoFrontier[] frontiers, 
+			int remains, int module, String name) throws IOException{
 		FileWriter writer = new FileWriter(name);
 		//first, we print the header
+		Attribute[] attributes = frontiers[0].getAttributes();
 		Latex.appendTableHeader(writer, attributes);		
-		for (int i = 1; i <= maxN; i++) {
-			if (i % module != remains && i != 1) continue;
+		for (int i = 0; i < frontiers.length; i++) {
+			DBProtocol[] pList = frontiers[i].getProtocols();
+			int e = pList[0].getTotalBitsExchangedDuringFastPhase();
+			if (e % module != remains && e != 2) continue;
 			List<Integer> toIgnore = new ArrayList<>();
 			//the frontier
-			DBProtocol[] frontier = frontiers[i-1].getFrontier();
+			DBProtocol[] frontier = frontiers[i].getFrontier();
 			List<List<DBProtocol>> clusters = new LinkedList<>();
 			for (int j = 0; j < frontier.length; j++) {
 				//protocols that already belong to a cluster
@@ -98,7 +124,7 @@ public class History {
 				//the cluster starts with someone in the frontier
 				cluster.add(frontier[j]);
 				for (int k = j+1; k < frontier.length; k++) {
-					if (frontiers[i-1].getRelationship().isEqual(frontier[j], frontier[k], i)){
+					if (frontier[j].isEqual(frontier[k], attributes)){
 						//equals protocols should be in the same cluster
 						cluster.add(frontier[k]);
 						toIgnore.add(k);
@@ -106,7 +132,7 @@ public class History {
 				}
 				clusters.add(cluster);
 			}
-			Latex.appendClusters(clusters, attributes, i, writer);
+			Latex.appendClusters(clusters, attributes, e, writer);
 		}
 		Latex.appendTableFooter(writer);
 		writer.close();
@@ -117,55 +143,122 @@ public class History {
 	 * A cause for a protocol P could be either the protocols that remove P previously and don't 
 	 * do it now, or the protocols the didn't remove it and remove it now.*/
 	private static void provideReasons(ParetoFrontier current,
-			ParetoFrontier before, int i) {
+			ParetoFrontier before, Attribute[] attributes) {
 		List<DBProtocol> entering = getProtocolsIn(before.getFrontier(), current.getFrontier());
 		List<DBProtocol> leaving = getProtocolsOut(before.getFrontier(), current.getFrontier());
 		//now we need to look for the indexes of this protocols.
 		int[] indexesIn = getIndexesOfProtocols(current.getProtocols(), entering);
-		int[] indexesOut = getIndexesOfProtocols(current.getProtocols(), leaving);
-		provideReasonsForIn(indexesIn, current, before, i);
-		provideReasonsForOut(indexesOut, current, before, i);
+		int[] indexesOut = getIndexesOfProtocols(before.getProtocols(), leaving);
+		provideReasonsForIn(indexesIn, current, before, attributes);
+		//provideReasonsForOut(indexesOut, before, attributes);
 	}
 
 	private static void provideReasonsForIn(int[] indexesIn,
-			ParetoFrontier current, ParetoFrontier before, int n) {
+			ParetoFrontier current, ParetoFrontier before, Attribute[] attributes) {
+		int ePrevious = before.getProtocols()[0].getTotalBitsExchangedDuringFastPhase();
+		int eCurrent = current.getProtocols()[0].getTotalBitsExchangedDuringFastPhase();
 		for (int i = 0; i < indexesIn.length; i++) {
 			DBProtocol p = current.getProtocols()[indexesIn[i]];
 			System.out.println("Analyzing why protocol: "+p+" is now in");
-			List<Integer> causes = before.getIndexesToBeRemoved().get(indexesIn[i]);
-			System.out.println("First, let see what happened when n = "+(n-1));
-			ProtocolNonDominantRelationship previousRelation = before.getRelationship();
-			for (Integer index : causes) {
-				DBProtocol cause = current.getProtocols()[index];
-				previousRelation.printInfoOfDomination(cause, p, n-1);
+			//we need to find what was the version of this protocol previously.
+			int indexBefore = findIndexOfSimilarProtocol(p, before);
+			if (indexBefore == -1){
+				System.out.println(p+" is just a new protocol that was not considered before");
+				System.out.println("However, let see its relation with other protocols because" +
+						" it should not be dominated by anyone");
+				for (DBProtocol toCompareWith : current.getFrontier()){
+					printInfoOfNonDomination(toCompareWith, p, attributes);
+				}
 			}
-			System.out.println("Now, let see what happened when n = "+(n));
-			ProtocolNonDominantRelationship currentRelation = current.getRelationship();
-			for (Integer index : causes) {
-				DBProtocol cause = current.getProtocols()[index];
-				currentRelation.printInfoOfNonDomination(cause, p, n);
+			else{
+				List<Integer> causes = before.getIndexesToBeRemoved().get(indexBefore);
+				System.out.println("First, let see what happened when e = "+(ePrevious));
+				for (Integer index : causes) {
+					DBProtocol cause = before.getProtocols()[index];
+					printInfoOfDomination(cause, before.getProtocols()[indexBefore], attributes);
+				}
+				System.out.println("Now, let see what happened when e = "+(eCurrent));
+				for (Integer index : causes) {
+					DBProtocol cause = before.getProtocols()[index];
+					int indexCurrent = findIndexOfSimilarProtocol(cause, current);
+					if (indexCurrent == -1) {
+						System.out.println("The protocol "+cause+" was dominating before, however, it is no longer considered");
+					}
+					else printInfoOfNonDomination(current.getProtocols()[indexCurrent], p, attributes);
+				}
 			}
 		}
 	}
 
+	private static int findIndexOfSimilarProtocol(DBProtocol p,
+			ParetoFrontier before) {
+		for (int i = 0; i < before.getProtocols().length; i++) {
+			if (p.equals(before.getProtocols()[i]))
+				throw new RuntimeException("should not happen");
+			if (p.isSameInstanceRegardlessRounds(before.getProtocols()[i])){
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	public static void printInfoOfDomination(DBProtocol a, DBProtocol b, Attribute[] attributes) {
+		System.out.println("");
+		System.out.println("Protocol: "+a.getIdentifier()+" dominates Protocol: "+b.getIdentifier()+", the reasons below");
+		for (int i = 0; i < attributes.length; i++) {
+			Attribute aValue = a.getAttribute(attributes[i]); 
+			Attribute bValue = b.getAttribute(attributes[i]);
+			if (aValue.dominate(bValue)) {
+				System.out.println("Attribute "+aValue.toString()+" dominates attribute "+bValue.toString());
+			}
+			else if (aValue.isEqual(bValue)){
+				System.out.println("Attribute "+aValue.toString()+" is equal to attribute "+bValue.toString());
+			}
+			else{ 
+				if (bValue.dominate(aValue)){
+					throw new RuntimeException("Attribute "+bValue.toString()+" dominates attribute "+aValue.toString());
+				}
+				throw new RuntimeException("there is no domination here. " +
+						"Attribute "+bValue.toString()+" in "+b.getIdentifier()+" " +
+								"dominates attribute "+aValue.toString()+" in "+a.getIdentifier());
+			}
+		}
+		System.out.println("");
+	}
+	
+	public static void printInfoOfNonDomination(DBProtocol a, DBProtocol b, Attribute[] attributes) {
+		System.out.println("");
+		System.out.println("Protocol: "+a.getIdentifier()+" DOES NOT dominate Protocol: "+b.getIdentifier()+", the reasons below");
+		for (int i = 0; i < attributes.length; i++) {
+			Attribute aValue = a.getAttribute(attributes[i]); 
+			Attribute bValue = b.getAttribute(attributes[i]);
+			if (bValue.dominate(aValue)) {
+				System.out.println("Attribute "+aValue.toString()+" is dominated by "+bValue.toString());
+			}
+			if (aValue.isEqual(bValue)) {
+				System.out.println("Attribute "+aValue.toString()+" is equal to "+bValue.toString());
+			}
+		}
+		System.out.println("");
+	}
+
 	private static void provideReasonsForOut(int[] indexesOut,
-			ParetoFrontier current, ParetoFrontier before, int n) {
+			ParetoFrontier before, Attribute[] attributes) {
+		int ePrevious = before.getProtocols()[0].getTotalBitsExchangedDuringFastPhase();
 		for (int i = 0; i < indexesOut.length; i++) {
-			DBProtocol p = current.getProtocols()[indexesOut[i]];
+			DBProtocol p = before.getProtocols()[indexesOut[i]];
 			System.out.println("Analyzing why protocol: "+p+" is now out");
-			List<Integer> causes = current.getIndexesToBeRemoved().get(indexesOut[i]);
-			System.out.println("First, let see what happened when n = "+(n-1));
-			ProtocolNonDominantRelationship previousRelation = before.getRelationship();
+			List<Integer> causes = before.getIndexesToBeRemoved().get(indexesOut[i]);
+			System.out.println("Let see what happened when e = "+(ePrevious));
+			for (Integer index : causes) {
+				DBProtocol cause = before.getProtocols()[index];
+				printInfoOfNonDomination(cause, p, attributes);
+			}
+			/*System.out.println("Now, let see what happened when e = "+(eCurrent));
 			for (Integer index : causes) {
 				DBProtocol cause = current.getProtocols()[index];
-				previousRelation.printInfoOfNonDomination(cause, p, n-1);
-			}
-			System.out.println("Now, let see what happened when n = "+(n));
-			ProtocolNonDominantRelationship currentRelation = current.getRelationship();
-			for (Integer index : causes) {
-				DBProtocol cause = current.getProtocols()[index];
-				currentRelation.printInfoOfDomination(cause, p, n);
-			}
+				printInfoOfDomination(cause, p, attributes);
+			}*/
 		}
 	}
 
@@ -173,9 +266,11 @@ public class History {
 			List<DBProtocol> subset) {
 		int[] result = new int[subset.size()];
 		int pos = 0;
+		//System.out.println("Computing indexes ");
 		for (DBProtocol p : subset) {
 			for (int i = 0; i < protocols.length; i++) {
 				if (p.equals(protocols[i])){
+					//System.out.println("Protocol "+p.getIdentifier()+" equal to "+protocols[i].getIdentifier());
 					result[pos] = i;
 					pos++;
 				}
@@ -188,7 +283,7 @@ public class History {
 		DBProtocol[] before = new DBProtocol[]{};
 		String toPrint = "";
 		for (int i = 0; i < frontier.length; i++) {
-			basicInfo(frontier[i], before, i+1);
+			basicInfo(frontier[i], before);
 			before = frontier[i];
 		}
 		System.out.println(toPrint);
@@ -196,15 +291,26 @@ public class History {
 
 	/*Trujillo- Apr 4, 2014
 	 * This just provides basic info such as the protocol in the frontier and the protocols that left or enter the frontier*/
-	public static void basicInfo(DBProtocol[] frontier, DBProtocol[] before, int n){
+	public static void basicInfo(DBProtocol[] frontier, DBProtocol[] before){
+		int e = frontier[0].getTotalBitsExchangedDuringFastPhase();
 		String newLine = System.getProperty("line.separator");
 		String toPrint = "";
-		toPrint += "n = "+(n)+newLine;
+		toPrint += "e = "+(e)+newLine;
 		toPrint += "\t Protocols: "+getProtocolInList(frontier);			
 		toPrint += newLine;
 		toPrint += "\t In: "+getProtocolInList(getProtocolsIn(before, frontier));
 		toPrint += newLine;
 		toPrint += "\t Out: "+getProtocolInList(getProtocolsOut(before, frontier));
+		toPrint += newLine;
+		System.out.println(toPrint);
+	}
+
+	public static void basicInfo(DBProtocol[] frontier){
+		int e = frontier[0].getTotalBitsExchangedDuringFastPhase();
+		String newLine = System.getProperty("line.separator");
+		String toPrint = "";
+		toPrint += "e = "+(e)+newLine;
+		toPrint += "\t Protocols: "+getProtocolInList(frontier);			
 		toPrint += newLine;
 		System.out.println(toPrint);
 	}
@@ -215,6 +321,7 @@ public class History {
 		for (int i = 0; i < current.length; i++) {
 			if (!isIn(current[i], before)) result.add(current[i]);
 		}
+		
 		return result;
 	}
 
@@ -229,7 +336,8 @@ public class History {
 
 	private static boolean isIn(DBProtocol p, DBProtocol[] list) {
 		for (int i = 0; i < list.length; i++) {
-			if (p.equals(list[i])) return true;
+			//if (p.equals(list[i])) return true;
+			if (p.isSameInstanceRegardlessRounds(list[i])) return true;
 		}
 		return false;
 	}

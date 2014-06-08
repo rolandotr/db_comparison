@@ -2,82 +2,74 @@ package attributes;
 
 import java.io.Serializable;
 
-import attributes.scales.KbitsScale;
-import attributes.scales.LogScale;
-import attributes.scales.NoScale;
-import attributes.scales.LinearScale;
+import attributes.relations.ApproximateEquality;
 import attributes.scales.Scale;
 
-public abstract class Attribute<T> implements Serializable{
+/*Trujillo- May 21, 2014
+ * An attribute has a comparable value and an equality relation over the domain of
+ * this value.*/
+public abstract class Attribute<T extends Comparable<T>> implements Serializable{
 
 	
 	private static final long serialVersionUID = 502686781523859675L;
 	
-	protected Scale<T> scale;
 	protected T value;
-	protected T scaledValue;
-	
-	public Attribute(T value, Scale<T> scale){
-		this.scale = scale;
-		this.value = value;
-		this.scaledValue = scale.scale(value);
-	}
-	
-	public T getValue(){
-		return value;
-	}
-	
-	public T getScaledValue(){
-		return scaledValue;
-	}
+	protected ApproximateEquality<T> equality;
+	protected Scale<T> scale;
 	
 	public Scale<T> getScale() {
 		return scale;
 	}
 
-	public abstract Attribute<T> getInstance();
-
-	/*Trujillo- Apr 5, 2014
-	 * Attributes with the our scales*/
-	public static Attribute[] getEmptyAttributesWithScales(){
-		return new Attribute[]{
-				new MafiaFraudProbability(0, new LogScale(2)),
-				new DistanceFraudProbability(0, new LogScale(2)),
-				new TerroristFraudProbability(0, new LogScale(2)),
-				new Memory(0l, new KbitsScale()),
-				new CryptoCalls(0, new NoScale<Integer>()),
-				new FinalSlowPhase(false),
-				new MultipleBitExchanged(false),
-				new LackOfSecurityProof(true),
-				new YearOfPublication(0, new NoScale<Integer>()),
-		};		
+	public void setScale(Scale<T> scale) {
+		this.scale = scale;
 	}
 
-	/*Trujillo- Apr 5, 2014
-	 * Attributes with the our scales*/
-	public static Attribute[] getEmptyAttributesNoYearWithScales(){
-		return  new Attribute[]{
-				new MafiaFraudProbability(0, new LogScale(2)),
-				new DistanceFraudProbability(0, new LogScale(2)),
-				new TerroristFraudProbability(0, new LogScale(2)),
-				new Memory(0l, new KbitsScale()),
-				new CryptoCalls(0, new NoScale<Integer>()),
-				new FinalSlowPhase(false),
-				//new LackOfSecurityProof(true),
-				new MultipleBitExchanged(false),
-		};		
+	public Attribute(ApproximateEquality<T> equality, Scale<T> scale){
+		this(null, equality, scale);
 	}
 	
+	public Attribute(T value, ApproximateEquality<T> equality, Scale<T> scale){
+		this.equality = equality;
+		this.value = value;
+		this.scale = scale;
+	}
+	
+	public ApproximateEquality<T> getEquality() {
+		return equality;
+	}
+
+	public void setEquality(ApproximateEquality<T> equality) {
+		this.equality = equality;
+	}
+
+	public void setValue(T value) {
+		this.value = value;
+	}
+
+	public T getValue(){
+		return value;
+	}
+	
+	public abstract Attribute<T> getInstance();
 	public abstract String getName();
 	
-	/*
-	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Attribute){
-			Attribute tmp = (Attribute)obj;
-			return tmp.getName().equals(this.getName()) && 
-		}
+	public boolean dominate(T x){
+		return !equality.equal(this.getValue(), x) 
+				&& value.compareTo(x) < 0;
 	}
-	*/
+
+	public boolean dominate(Attribute<T> x){
+		return !equality.equal(this.getValue(), x.getValue()) 
+				&& value.compareTo(x.getValue()) < 0;
+	}
+
+	public boolean isEqual(Attribute<T> x) {
+		return equality.equal(this.getValue(), x.getValue()); 
+	}
+
+	public T getScaledValue() {
+		return scale.scale(value);
+	}
 
 }

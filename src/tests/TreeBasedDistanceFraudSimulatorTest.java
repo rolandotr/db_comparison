@@ -1,7 +1,8 @@
 package tests;
 
-import protocols.TreeBasedDistanceFraudSimulator;
-import protocols.TreeBasedProtocol;
+import protocols.specifications.TreeBasedDistanceFraudSimulator;
+import protocols.specifications.TreeBasedProtocol;
+
 
 public class TreeBasedDistanceFraudSimulatorTest {
 
@@ -19,8 +20,9 @@ public class TreeBasedDistanceFraudSimulatorTest {
 		TreeBasedProtocol pro = new TreeBasedProtocol(0, 0);
 		int n = 128;
 		for (int i = 1; i <= n; i++) {
-			double mafia = pro.getMafiaFraudProbability(i).doubleValue();
-			double distance = pro.getDistanceFraudProbability(i).doubleValue();
+			pro.setNumberOfRounds(i);
+			double mafia = pro.getMafiaFraudProbability().doubleValue();
+			double distance = pro.getDistanceFraudProbability().doubleValue();
 			System.out.println("n = "+i+" : mafia = "+mafia+" : distance = "+distance);
 		}
 	}

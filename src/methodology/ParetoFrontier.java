@@ -5,10 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import protocols.specifications.DBProtocol;
+
 import attributes.Attribute;
-import attributes.comparators.DefaultNondominantRelation;
-import attributes.comparators.NondominantRelationship;
-import protocols.DBProtocol;
 
 public class ParetoFrontier implements Serializable{
 	
@@ -17,64 +16,60 @@ public class ParetoFrontier implements Serializable{
 	private DBProtocol[] protocols;
 	private DBProtocol[] frontier;
 	private TreeMap<Integer, List<Integer>> indexesToBeRemoved;
-	private ProtocolNonDominantRelationship relationship;
-	
+	private Attribute[] attributes;
+
+	public Attribute[] getAttributes() {
+		return attributes;
+	}
 
 
+	public void setAttributes(Attribute[] attributes) {
+		this.attributes = attributes;
+	}
 
-	public ParetoFrontier(DBProtocol[] protocols, DBProtocol[] frontier, TreeMap<Integer, 
-			List<Integer>> indexesToBeRemoved, ProtocolNonDominantRelationship relationship){
+
+	public ParetoFrontier(DBProtocol[] protocols, DBProtocol[] frontier, Attribute[] attributes, TreeMap<Integer, 
+			List<Integer>> indexesToBeRemoved){
 		this.protocols = protocols;
 		this.frontier = frontier;
 		this.indexesToBeRemoved = indexesToBeRemoved;
-		this.relationship = relationship;
+		this.attributes = attributes;
 	}
 
 	
 	/*Trujillo- Apr 4, 2014
 	 * Compute the pareto frontier according to some attributes and order*/
-	public static ParetoFrontier computeParetoFrontier(DBProtocol[] protocols, NondominantRelationship order, Attribute[] attributes, int n){
-		ProtocolNonDominantRelationship relationship = new ProtocolNonDominantRelationship(attributes);
+	public static ParetoFrontier computeParetoFrontier(DBProtocol[] protocols, Attribute[] attributes){
 		TreeMap<Integer, List<Integer>> indexesToBeRemoved = new TreeMap<>();
 		for (int i = 0; i < protocols.length; i++) {
 			for (int j = 0; j < protocols.length; j++) {
-				if (relationship.isDominating(protocols[i], protocols[j], n)){
-					if (indexesToBeRemoved.containsKey(j)) 
+				if (!indexesToBeRemoved.containsKey(j)){ 
+					List<Integer> tmp = new LinkedList<>();
+					indexesToBeRemoved.put(j, tmp);
+				}
+				if (protocols[i].dominate(protocols[j], attributes)){
 						indexesToBeRemoved.get(j).add(i);
-					else {
-						List<Integer> tmp = new LinkedList<>();
-						tmp.add(i);
-						indexesToBeRemoved.put(j, tmp);
-					}
 				}
 			}
 		}
-		DBProtocol[] result = new DBProtocol[protocols.length - indexesToBeRemoved.size()];
-		int pos = 0;
+		List<DBProtocol> result = new LinkedList<>();
 		for (int i = 0; i < protocols.length; i++) {
-			if (indexesToBeRemoved.containsKey(i)) {
+			if (!(indexesToBeRemoved.get(i).isEmpty())) {
 				continue;
 			}
-			result[pos] = protocols[i];
-			pos++;
+			result.add(protocols[i]);
 		}
-		return new ParetoFrontier(protocols, result, indexesToBeRemoved, relationship);
+		DBProtocol[] tmp = new DBProtocol[result.size()];
+		return new ParetoFrontier(protocols, result.toArray(tmp), attributes, indexesToBeRemoved);
 	}
 	
-	public static ParetoFrontier[] computeAllParetoFrontiers(DBProtocol[] protocols, NondominantRelationship order, Attribute[] attributes, int maxN){
-		ParetoFrontier[] result = new ParetoFrontier[maxN];
-		for (int i = 1; i <= maxN; i++) {
-			result[i-1] = computeParetoFrontier(protocols, order, attributes, i);
+	public static ParetoFrontier[] computeAllParetoFrontiers(DBProtocol[][] protocols, 
+			Attribute[] attributes){
+		ParetoFrontier[] result = new ParetoFrontier[protocols.length];
+		for (int i = 0; i < protocols.length; i++) {
+			result[i] = computeParetoFrontier(protocols[i], attributes);
 		}
 		return result;
-	}
-	
-	/*Trujillo- Apr 3, 2014
-	 * Here the protocols are defined in the class DBprotocols, and the order is the default order*/
-	public static ParetoFrontier computeParetoFrontier(int factor, Attribute[] attributes, int n){
-		DBProtocol[] protocols = DBProtocol.loadProtocols(factor);
-		NondominantRelationship order = new DefaultNondominantRelation();
-		return computeParetoFrontier(protocols, order, attributes, n);
 	}
 	
 	public DBProtocol[] getProtocols() {
@@ -91,9 +86,6 @@ public class ParetoFrontier implements Serializable{
 		return indexesToBeRemoved;
 	}
 
-	public ProtocolNonDominantRelationship getRelationship() {
-		return relationship;
-	}
 	public void setProtocols(DBProtocol[] protocols) {
 		this.protocols = protocols;
 	}
@@ -109,9 +101,5 @@ public class ParetoFrontier implements Serializable{
 		this.indexesToBeRemoved = indexesToBeRemoved;
 	}
 
-
-	public void setRelationship(ProtocolNonDominantRelationship relationship) {
-		this.relationship = relationship;
-	}
 
 }

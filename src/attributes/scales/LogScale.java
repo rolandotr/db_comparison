@@ -1,8 +1,9 @@
 package attributes.scales;
 
+import protocols.specifications.SKIProtocol;
 import attributes.Attribute;
 import attributes.MafiaFraudProbability;
-import protocols.SKIProtocol;
+import attributes.relations.ProbabilityRelation;
 
 
 /*Trujillo- Mar 17, 2014
@@ -25,7 +26,7 @@ public class LogScale implements Scale<Double>{
 	
 	public static void main(String[] args) {
 		SKIProtocol p = new SKIProtocol(3, 128);
-		Attribute a = p.getAttribute(new MafiaFraudProbability(0, new LogScale(2)), 3);
+		Attribute a = p.getAttribute(new MafiaFraudProbability(0, new ProbabilityRelation(), new LogScale(2)));
 		System.out.println(a.getValue());
 	}
 

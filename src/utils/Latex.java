@@ -5,9 +5,10 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import protocols.specifications.DBProtocol;
+
 import attributes.Attribute;
 
-import protocols.DBProtocol;
 
 public abstract class Latex {
 	
@@ -52,7 +53,7 @@ public abstract class Latex {
 		//now we need to add the attributes values
 		DBProtocol dominating = cluster.get(0);
 		for (int i = 0; i < attributes.length; i++) {
-			Attribute a = dominating.getAttribute(attributes[i], n);
+			Attribute a = dominating.getAttribute(attributes[i]);
 			writer.append(" & $"+a.getScale().scaleMeaning(a.getScaledValue())+"$ ");			
 		}
 		writer.append(" \\\\ "+newLine);

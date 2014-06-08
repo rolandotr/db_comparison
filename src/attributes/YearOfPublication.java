@@ -1,17 +1,24 @@
 package attributes;
 
+import attributes.relations.ApproximateEquality;
 import attributes.scales.Scale;
 
 
 public class YearOfPublication extends Attribute<Integer>{
 
-	public YearOfPublication(int value, Scale<Integer> scale){
-		super(value, scale);
+	private static final long serialVersionUID = 3600307032927227628L;
+
+	public YearOfPublication(int value, ApproximateEquality<Integer> equality, Scale<Integer> scale){
+		super(value, equality, scale);
+	}
+
+	public YearOfPublication(ApproximateEquality<Integer> equality, Scale<Integer> scale){
+		this(0, equality, scale);
 	}
 
 	@Override
 	public YearOfPublication getInstance() {
-		return new YearOfPublication(value, scale);
+		return new YearOfPublication(value, equality, scale);
 	}
 	
 	@Override

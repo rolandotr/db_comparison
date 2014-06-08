@@ -1,17 +1,23 @@
 package attributes;
 
-
+import attributes.relations.ApproximateEquality;
 import attributes.scales.Scale;
 
 public class DistanceFraudProbability extends Attribute<Double>{
 
-	public DistanceFraudProbability(double value, Scale<Double> scale){
-		super(value, scale);
+	private static final long serialVersionUID = -8977243624741302469L;
+
+	public DistanceFraudProbability(double value, ApproximateEquality<Double> equality, Scale<Double> scale){
+		super(value, equality, scale);
+	}
+
+	public DistanceFraudProbability(ApproximateEquality<Double> equality, Scale<Double> scale){
+		this(0, equality, scale);
 	}
 
 	@Override
 	public DistanceFraudProbability getInstance() {
-		return new DistanceFraudProbability(value, scale);
+		return new DistanceFraudProbability(value, equality, scale);
 	}
 		
 	@Override
