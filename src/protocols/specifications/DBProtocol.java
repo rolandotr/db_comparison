@@ -215,6 +215,9 @@ public abstract class DBProtocol implements Serializable{
 		tmp = new YKHLProtocol().getInstances();
 		length += tmp.length;
 		protocols.add(tmp);
+		/*tmp = new BestProtocol().getInstances();
+		length += tmp.length;
+		protocols.add(tmp);*/
 		DBProtocol[] result = new DBProtocol[length];
 		int index = 0;
 		for (DBProtocol[] list : protocols) {

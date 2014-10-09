@@ -1,6 +1,8 @@
 package protocols.specifications;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -29,14 +31,14 @@ public class PoulidorProtocol extends DBProtocol{
 
 	@Override
 	public BigDecimal getMafiaFraudProbability() {
-		BigDecimal half = new BigDecimal(0.5);
+		/*BigDecimal half = new BigDecimal(0.5);
 		BigDecimal result = half.pow(n);
 		for (int i = 1; i <= n; i++){
 			result = result.add((half.pow(i)).multiply(maxProb2(i, n)));
 		}
-		return result;
+		return result;*/
 		//if (n == 0) return BigDecimal.ONE;
-		//return mafiaFraudFromDisk2(n);
+		return new BigDecimal(""+mafiaFraudFromDisk2(n));
 	}
 	@Override
 	public int getYearOfPublication() {
@@ -104,7 +106,7 @@ public class PoulidorProtocol extends DBProtocol{
 	
 	@Override
 	public BigDecimal getDistanceFraudProbability() {
-		if (n == 0) return BigDecimal.ONE;
+		/*if (n == 0) return BigDecimal.ONE;
 		if (n == 1) return new BigDecimal("0.75");
 		double p  = 1;
 		for (int i = 1; i <= n; i++){
@@ -114,9 +116,9 @@ public class PoulidorProtocol extends DBProtocol{
 		BigDecimal four = new BigDecimal(4d);
 		BigDecimal sqrt = half.pow(2*n).add(((four).multiply(half.pow(n))).negate()).add(four.multiply(new BigDecimal(p)));
 		BigDecimal result = half.pow(n);
-		return new BigDecimal(result.doubleValue() + Math.sqrt(sqrt.doubleValue())/2);
+		return new BigDecimal(result.doubleValue() + Math.sqrt(sqrt.doubleValue())/2);*/
 		//if (n == 0) return BigDecimal.ONE;
-		//return new BigDecimal(distanceFraudFromDisk2(n));
+		return new BigDecimal(distanceFraudFromDisk2(n));
 	}
 
 	@Override
@@ -211,6 +213,72 @@ public class PoulidorProtocol extends DBProtocol{
 	public int getBitsGenerated() {
 		return 0;
 	}
+
+	private double[] mafia2;
+
+	private double mafiaFraudFromDisk2(int n){
+		if (mafia2 == null) {
+			try {
+				fillMafia2(256);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		return mafia2[n];
+	}
+
+	/*La informacion sobre el distance esta en un fichero de nombre "d_FDA-"+n*/
+	private void fillMafia2(int n) throws IOException {
+		String tmp;
+		String[] split;
+		int r;
+		mafia2 = new double[n+1];
+		for (int i = 1; i <= n; i++){
+			File f = new File(this.getMafiaFileNameOfValues());
+			BufferedReader reader = new BufferedReader(new FileReader(f));
+			while (reader.ready()){
+				tmp = reader.readLine();
+				split = tmp.split(" ");
+				mafia2[Integer.parseInt(split[0])] = Double.parseDouble(split[1]);
+			}
+			reader.close();
+		}
+	}	
+
+	private double[] distances2;
+
+	private double distanceFraudFromDisk2(int n){
+		if (distances2 == null) {
+			try {
+				fillDistance2(256);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
+		}
+		return distances2[n];
+	}
+
+	/*La informacion sobre el distance esta en un fichero de nombre "d_FDA-"+n*/
+	private void fillDistance2(int n) throws IOException {
+		String tmp;
+		String[] split;
+		int r;
+		distances2 = new double[n+1];
+		for (int i = 1; i <= n; i++){
+			File f = new File(this.getDistanceFileNameOfValues());
+			BufferedReader reader = new BufferedReader(new FileReader(f));
+			while (reader.ready()){
+				tmp = reader.readLine();
+				split = tmp.split(" ");
+				distances2[Integer.parseInt(split[0])] = Double.parseDouble(split[1]);
+			}
+			reader.close();
+		}
+	}	
 
 
 }

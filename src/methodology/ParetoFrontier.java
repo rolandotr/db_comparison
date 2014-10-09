@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import protocols.specifications.DBProtocol;
+import utils.Progress;
 
 import attributes.Attribute;
 
@@ -39,18 +40,24 @@ public class ParetoFrontier implements Serializable{
 	
 	/*Trujillo- Apr 4, 2014
 	 * Compute the pareto frontier according to some attributes and order*/
-	public static ParetoFrontier computeParetoFrontier(DBProtocol[] protocols, Attribute[] attributes){
+	public static ParetoFrontier computeParetoFrontier(DBProtocol[] protocols, Attribute[] attributes, Progress progress){
 		TreeMap<Integer, List<Integer>> indexesToBeRemoved = new TreeMap<>();
 		for (int i = 0; i < protocols.length; i++) {
 			for (int j = 0; j < protocols.length; j++) {
+				progress.addProgress();
 				if (!indexesToBeRemoved.containsKey(j)){ 
 					List<Integer> tmp = new LinkedList<>();
 					indexesToBeRemoved.put(j, tmp);
 				}
 				if (protocols[i].dominate(protocols[j], attributes)){
-						indexesToBeRemoved.get(j).add(i);
+					/*
+					System.out.println(protocols[i].getIdentifier()+" dominates "+protocols[j].getIdentifier());
+					History.printInfoOfDomination(protocols[i], protocols[j], attributes);
+					*/
+					indexesToBeRemoved.get(j).add(i);
 				}
 			}
+			progress.printProgress();
 		}
 		List<DBProtocol> result = new LinkedList<>();
 		for (int i = 0; i < protocols.length; i++) {
@@ -66,8 +73,15 @@ public class ParetoFrontier implements Serializable{
 	public static ParetoFrontier[] computeAllParetoFrontiers(DBProtocol[][] protocols, 
 			Attribute[] attributes){
 		ParetoFrontier[] result = new ParetoFrontier[protocols.length];
+		long total = 0;
 		for (int i = 0; i < protocols.length; i++) {
-			result[i] = computeParetoFrontier(protocols[i], attributes);
+			for (int j = 0; j < protocols[i].length; j++) {
+				total++;
+			}
+		}
+		Progress progress = new Progress(total*total);
+		for (int i = 0; i < protocols.length; i++) {
+			result[i] = computeParetoFrontier(protocols[i], attributes, progress);
 		}
 		return result;
 	}

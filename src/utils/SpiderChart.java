@@ -12,6 +12,7 @@ import protocols.specifications.BrandsAndChaumProtocol;
 import protocols.specifications.DBProtocol;
 import protocols.specifications.HanckeAndKuhnProtocol;
 import protocols.specifications.MADProtocol;
+import protocols.specifications.MunillaAndPeinadoProtocol;
 import protocols.specifications.PoulidorProtocol;
 import protocols.specifications.RasmussenAndCapckunProtocol;
 import protocols.specifications.SKIProtocol;
@@ -44,7 +45,7 @@ public class SpiderChart {
 public static String newLine = System.getProperty("line.separator");
 
 	public static void main(String[] args) throws IOException {
-		main1(args);
+		main3(args);
 	}
 	public static void main1(String[] args) throws IOException {
 		DBProtocol best = new BestProtocol();
@@ -66,6 +67,30 @@ public static String newLine = System.getProperty("line.separator");
 		};
 
 		printSpiderChart(firstSet, attributes, "swiss_ski.tex");
+	}
+
+	public static void main3(String[] args) throws IOException {
+		DBProtocol best = new BestProtocol();
+		best.setNumberOfRounds(16);
+		DBProtocol tree = new TreeBasedProtocol(8);
+		tree.setNumberOfRounds(16);
+		DBProtocol hk = new MunillaAndPeinadoProtocol(0.75);
+		hk.setNumberOfRounds(16);
+		DBProtocol bc = new BrandsAndChaumProtocol();
+		bc.setNumberOfRounds(16);
+		DBProtocol[] firstSet = new DBProtocol[]{
+				best,tree,hk, bc,
+		};
+		Attribute[] attributes = new Attribute[]{
+				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new Memory(new MemoryRelation(), new KbitsScale()),
+				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
+				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
+		};
+
+		printSpiderChart(firstSet, attributes, "tree_hk_bc.tex");
 	}
 
 	public static void main2(String[] args) throws IOException {

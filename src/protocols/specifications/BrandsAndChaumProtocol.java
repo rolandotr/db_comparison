@@ -2,6 +2,29 @@ package protocols.specifications;
 
 import java.math.BigDecimal;
 
+import org.omg.CORBA.TCKind;
+
+import attributes.Attribute;
+import attributes.CryptoCalls;
+import attributes.DistanceFraudProbability;
+import attributes.FinalSlowPhase;
+import attributes.MafiaFraudProbability;
+import attributes.Memory;
+import attributes.SizeOfMessages;
+import attributes.TerroristFraudProbability;
+import attributes.TotalBitsExchanged;
+import attributes.relations.BitsExchangedRelation;
+import attributes.relations.FinalSlowPhaseRelation;
+import attributes.relations.IntegerRelation;
+import attributes.relations.MemoryRelation;
+import attributes.relations.ProbabilityRelation;
+import attributes.relations.SizeOfMessagesRelation;
+import attributes.scales.KbitsScale;
+import attributes.scales.LogScale;
+import attributes.scales.NoScale;
+
+import methodology.History;
+
 public class BrandsAndChaumProtocol extends DBProtocol{
 	
 	private static final long serialVersionUID = 4953569397230687732L;
@@ -100,6 +123,30 @@ public class BrandsAndChaumProtocol extends DBProtocol{
 	@Override
 	public int getBitsGenerated() {
 		return n;
+	}
+	
+	public static void main(String[] args) {
+		/*BrandsAndChaumProtocol p1 = new BrandsAndChaumProtocol();
+		p1.setNumberOfRounds(32);
+		BrandsAndChaumProtocol p2 = new BrandsAndChaumProtocol();
+		p2.setNumberOfRounds(31);*/
+		BrandsAndChaumProtocol p1 = new BrandsAndChaumProtocol();
+		p1.setNumberOfRounds(32);
+		BussardAndBaggaProtocol p2 = new BussardAndBaggaProtocol();
+		p2.setNumberOfRounds(32);
+		Attribute[] attributes = new Attribute[]{
+				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				//new TotalBitsExchanged(new BitsExchangedRelation(), new NoScale<Integer>()),
+				new TotalBitsExchanged(new IntegerRelation(), new NoScale<Integer>()),
+				new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
+				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
+				new Memory(new MemoryRelation(), new KbitsScale()),
+				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
+		};
+
+		History.printInfoOfDomination(p1, p2, attributes);
 	}
 
 }

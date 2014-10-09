@@ -30,6 +30,11 @@ public abstract class Latex {
 	}
 
 	public static void appendClusters(List<List<DBProtocol>> clusters, Attribute[] attributes, int n, FileWriter writer) throws IOException {
+		boolean goOn = false;
+		for (List<DBProtocol> cluster : clusters) {
+			if (!cluster.isEmpty()) goOn = true;
+		}
+		if (!goOn) return;
 		String newLine = System.getProperty("line.separator");
 		writer.append("\\multirow{"+clusters.size()+"}*{\\ $"+n+"$ \\ }"+newLine);
 		for (List<DBProtocol> cluster : clusters) {

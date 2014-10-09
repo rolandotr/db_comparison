@@ -82,7 +82,11 @@ public class History {
 	 * pareto frontier evolves with n.*/
 	public static void printHistory(DBProtocol[][] protocols,  
 			Attribute[] attributes, ParetoFrontier[] frontiers){
-		
+		long total = 0; 
+		for (int i = 0; i < frontiers.length; i++) {
+			total += frontiers[i].getProtocols().length;
+		}
+		System.out.println("There are "+total+" nondominated protocol instances");
 		ParetoFrontier before = null;
 		for (int i = 0; i < protocols.length; i++) {
 			//System.out.println("Computing pareto frontier for e = "+i);
@@ -105,6 +109,7 @@ public class History {
 	 * Print the history in a latex table format*/
 	public static void printLatexTable(ParetoFrontier[] frontiers, 
 			int remains, int module, String name) throws IOException{
+		if (frontiers.length == 0) return;
 		FileWriter writer = new FileWriter(name);
 		//first, we print the header
 		Attribute[] attributes = frontiers[0].getAttributes();
@@ -116,6 +121,7 @@ public class History {
 			List<Integer> toIgnore = new ArrayList<>();
 			//the frontier
 			DBProtocol[] frontier = frontiers[i].getFrontier();
+			//if (frontier.length == 0) continue;
 			List<List<DBProtocol>> clusters = new LinkedList<>();
 			for (int j = 0; j < frontier.length; j++) {
 				//protocols that already belong to a cluster
@@ -132,6 +138,7 @@ public class History {
 				}
 				clusters.add(cluster);
 			}
+			//if (clusters.isEmpty()) continue;
 			Latex.appendClusters(clusters, attributes, e, writer);
 		}
 		Latex.appendTableFooter(writer);
@@ -296,6 +303,8 @@ public class History {
 		String newLine = System.getProperty("line.separator");
 		String toPrint = "";
 		toPrint += "e = "+(e)+newLine;
+		toPrint += frontier.length+" protocols in total";			
+		toPrint += newLine;
 		toPrint += "\t Protocols: "+getProtocolInList(frontier);			
 		toPrint += newLine;
 		toPrint += "\t In: "+getProtocolInList(getProtocolsIn(before, frontier));
@@ -310,6 +319,8 @@ public class History {
 		String newLine = System.getProperty("line.separator");
 		String toPrint = "";
 		toPrint += "e = "+(e)+newLine;
+		toPrint += frontier.length+" protocols in total";			
+		toPrint += newLine;
 		toPrint += "\t Protocols: "+getProtocolInList(frontier);			
 		toPrint += newLine;
 		System.out.println(toPrint);

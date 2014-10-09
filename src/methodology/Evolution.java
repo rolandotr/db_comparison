@@ -6,8 +6,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.math.BigDecimal;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import protocols.specifications.DBProtocol;
 
@@ -19,6 +24,8 @@ import attributes.MafiaFraudProbability;
 import attributes.Memory;
 import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
+import attributes.TotalBitsExchanged;
+import attributes.relations.BitsExchangedRelation;
 import attributes.relations.FinalSlowPhaseRelation;
 import attributes.relations.IntegerRelation;
 import attributes.relations.MemoryRelation;
@@ -40,13 +47,20 @@ public abstract class Evolution {
 	
 	public static void main1(String[] args) throws IOException {
 		System.setOut(new PrintStream("evolution.txt"));
-		DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
+		System.out.println("Starting");
+		//DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
+		DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
+		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		protocols = constraintProtocols(protocols);
+		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
+		//protocols = constraintProtocolsToMafiaAndDistance(protocols, Math.pow(0.5, 16), Math.pow(0.5, 16), 0);
+		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
 				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
 				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				//new TotalBitsExchanged(new IntegerRelation(), new NoScale<Integer>()),
+				new TotalBitsExchanged(new IntegerRelation(), new NoScale<Integer>()),
+				//new TotalBitsExchanged(new BitsExchangedRelation(), new NoScale<Integer>()),
 				new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
 				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
 				new Memory(new MemoryRelation(), new KbitsScale()),
@@ -55,17 +69,47 @@ public abstract class Evolution {
 		
 		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
 		
+		System.out.println("Saving on disk");
 		
 		History.saveInDiskTheFrontiers(frontiers, "evolution.obj");
 		
 		
 		History.printHistory(protocols, attributes, frontiers);
 		
+		frontiers =  orderFrontierByBitsExchanged(frontiers, attributes);
 		
-		History.printLatexTable(frontiers, 0, 32, "evolution_table.tex");
+		System.out.println("Printing latex table");
+		
+		History.printLatexTable(frontiers, 0, 1, "evolution_table.tex");
 
 	}
 	
+	private static ParetoFrontier[] orderFrontierByBitsExchanged(
+			ParetoFrontier[] frontiers, Attribute[] attributes) {
+		TreeMap<Integer, List<DBProtocol>> result = new TreeMap<>();
+		for (int i = 0; i < frontiers.length; i++) {
+			DBProtocol[] protocols = frontiers[i].getFrontier();
+			for (int j = 0; j < protocols.length; j++) {
+				int e = protocols[j].getTotalBitsExchangedDuringFastPhase();
+				//System.out.println("Adding protocol "+protocols[j].getIdentifier()+" with e = "+protocols[j].getTotalBitsExchangedDuringFastPhase());
+				if (!result.containsKey(e)){
+					result.put(e, new LinkedList<DBProtocol>());
+				}
+				result.get(e).add(protocols[j]);
+			}
+		}
+		ParetoFrontier[] result2 = new ParetoFrontier[result.size()];
+		int index = 0;
+		for (List<DBProtocol> protocols : result.values()){
+			DBProtocol[] pArray = new DBProtocol[protocols.size()];
+			int pos = 0;
+			for (DBProtocol p : protocols) pArray[pos++] = p;
+			//System.out.println("Adding "+pArray.length+" protocols with e = "+pArray[0].getTotalBitsExchangedDuringFastPhase());
+			result2[index++] = new ParetoFrontier(pArray, pArray, attributes, null);
+		}
+		return result2;
+	}
+
 	public static void main2(String[] args) throws IOException, ClassNotFoundException {
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("evolution.obj")));
 		ParetoFrontier[] frontiers = (ParetoFrontier[])in.readObject();
@@ -89,8 +133,10 @@ public abstract class Evolution {
 			long memoryUpperBound = 8192;//4Kbyte which is 8192 bits.
 			List<DBProtocol> tmp = new LinkedList<>();
 			for (int j = 0; j < pList.length; j++) {
-				BigDecimal mafiaUpperBound = (new BigDecimal("0.75")).pow(pList[j].getNumberOfRounds());
-				BigDecimal distanceUpperBound = (new BigDecimal("0.75")).pow(pList[j].getNumberOfRounds());
+				//BigDecimal mafiaUpperBound = (new BigDecimal("0.75")).pow(pList[j].getNumberOfRounds());
+				//BigDecimal distanceUpperBound = (new BigDecimal("0.75")).pow(pList[j].getNumberOfRounds());
+				BigDecimal mafiaUpperBound = (new BigDecimal("1")).pow(pList[j].getNumberOfRounds());
+				BigDecimal distanceUpperBound = (new BigDecimal("1")).pow(pList[j].getNumberOfRounds());
 				BigDecimal mafia = pList[j].getMafiaFraudProbability();
 				BigDecimal distance = pList[j].getDistanceFraudProbability();
 				long memory = pList[j].getMemory();
@@ -116,4 +162,38 @@ public abstract class Evolution {
 		return result;
 	}
 
+	public static DBProtocol[][] constraintProtocolsToMafiaAndDistance(DBProtocol[][] protocols, 
+			double mafiaUpperBound, double distanceUpperBound, double terroristUpperBound, 
+			int cryptoCallsUpperBound) {
+		List<DBProtocol[]> tmpResult = new LinkedList<>();
+		for (int i = 0; i < protocols.length; i++) {
+			DBProtocol[] pList = protocols[i];
+			List<DBProtocol> tmp = new LinkedList<>();
+			for (int j = 0; j < pList.length; j++) {
+				BigDecimal mafia = pList[j].getMafiaFraudProbability();
+				BigDecimal distance = pList[j].getDistanceFraudProbability();
+				BigDecimal terrorist = pList[j].getTerroristFraudProbability();
+				int cryptoCalls = pList[j].getCryptoCalls();
+				if (mafia.doubleValue() <= mafiaUpperBound &&
+						distance.doubleValue() <= distanceUpperBound &&
+						terrorist.doubleValue() <= terroristUpperBound &&
+						cryptoCalls <= cryptoCallsUpperBound){
+					tmp.add(pList[j]);//this protocol meets the constraints.
+				}
+			}
+			if (tmp.isEmpty()) continue;
+			DBProtocol[] tmp2 = new DBProtocol[tmp.size()];
+			int pos = 0;
+			for (DBProtocol p : tmp) {
+				tmp2[pos++] = p;
+			}
+			tmpResult.add(tmp2);
+		}
+		DBProtocol[][] result = new DBProtocol[tmpResult.size()][];
+		int pos = 0;
+		for (DBProtocol[] list : tmpResult){
+			result[pos++] = list;
+		}
+		return result;
+	}
 }
