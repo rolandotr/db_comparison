@@ -167,7 +167,7 @@ public class PoulidorProtocol extends DBProtocol{
 		PoulidorProtocol p = new PoulidorProtocol();
 		FileWriter writerMafia = new FileWriter(new File(p.getMafiaFileNameOfValues()));
 		FileWriter writerDistance = new FileWriter(new File(p.getDistanceFileNameOfValues()));		
-		for (int i = 0; i <= 256; i++){
+		for (int i = 0; i <= 257; i++){
 			p.setNumberOfRounds(i);
 			BigDecimal mafia = p.getMafiaFraudProbability();
 			BigDecimal distance = p.getDistanceFraudProbability();
@@ -191,7 +191,13 @@ public class PoulidorProtocol extends DBProtocol{
 	}
 
 	public static void main(String[] args) throws IOException {
-		generateDataFile();
+		PoulidorProtocol p = new PoulidorProtocol();
+		p.setNumberOfRounds(256);
+		BigDecimal mafia = p.getMafiaFraudProbability();
+		System.out.println("n = "+256+" Mafia = "+mafia.doubleValue());
+		BigDecimal distance = p.getDistanceFraudProbability();
+		System.out.println("n = "+256+" Distance = "+distance.doubleValue());
+		//generateDataFile();
 	}
 
 	@Override
@@ -219,7 +225,7 @@ public class PoulidorProtocol extends DBProtocol{
 	private double mafiaFraudFromDisk2(int n){
 		if (mafia2 == null) {
 			try {
-				fillMafia2(256);
+				fillMafia2(257);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -252,7 +258,7 @@ public class PoulidorProtocol extends DBProtocol{
 	private double distanceFraudFromDisk2(int n){
 		if (distances2 == null) {
 			try {
-				fillDistance2(256);
+				fillDistance2(257);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

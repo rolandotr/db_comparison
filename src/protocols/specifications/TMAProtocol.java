@@ -20,7 +20,7 @@ public class TMAProtocol extends DBProtocol{
 		return "TMA";
 	}
 
-	BigDecimal[] mafiaFraud = new BigDecimal[256];
+	BigDecimal[] mafiaFraud = new BigDecimal[257];
 
 	@Override
 	public BigDecimal getMafiaFraudProbability() {
@@ -39,11 +39,23 @@ public class TMAProtocol extends DBProtocol{
 		return mafiaFraudFromDisk2(n);
 	}
 
+	public BigDecimal getMafiaFraudProbabilityExpensiveMethod() {
+		if (n == 0) return BigDecimal.ONE;
+		BigDecimal tmp1 = computeMGivenDifferent(n);
+		BigDecimal tmp2 = new BigDecimal(0.5);
+		tmp2 = tmp2.pow(n);
+		BigDecimal tmp3 = new BigDecimal(1);
+		tmp3 = tmp3.add(tmp2.negate());
+		tmp3 = tmp3.multiply(tmp1);
+		tmp3 = tmp3.add(tmp2);
+		return tmp3;
+	}
+
 	@Override
 	public DBProtocol getInstance() {
 		return new TMAProtocol();
 	}
-	BigDecimal[] MGivenDifferent = new BigDecimal[256];
+	BigDecimal[] MGivenDifferent = new BigDecimal[257];
 
 	private BigDecimal computeMGivenDifferent(int i) {
 		if (MGivenDifferent[i] != null) return MGivenDifferent[i];
@@ -60,7 +72,7 @@ public class TMAProtocol extends DBProtocol{
 		return MGivenDifferent[i];
 	}
 	
-	BigDecimal[] MGivenDifferentGivenM = new BigDecimal[256];
+	BigDecimal[] MGivenDifferentGivenM = new BigDecimal[257];
 
 	private BigDecimal computeMGivenDifferentGivenM(int i) {
 		if (MGivenDifferentGivenM[i] != null) return MGivenDifferentGivenM[i];
@@ -90,7 +102,7 @@ public class TMAProtocol extends DBProtocol{
 		return computeSGivenMGivenDifferent(i-1);
 	}
 
-	BigDecimal[] SGivenMGivenDifferent = new BigDecimal[256];
+	BigDecimal[] SGivenMGivenDifferent = new BigDecimal[257];
 	
 	private BigDecimal computeSGivenMGivenDifferent(int i) {
 		if (SGivenMGivenDifferent[i] != null) return SGivenMGivenDifferent[i];
@@ -107,7 +119,7 @@ public class TMAProtocol extends DBProtocol{
 		return SGivenMGivenDifferent[i];
 	}
 
-	BigDecimal[] EqualChallengesGivenDifferentGiven = new BigDecimal[256];
+	BigDecimal[] EqualChallengesGivenDifferentGiven = new BigDecimal[257];
 
 	private BigDecimal computeEqualChallengesGivenDifferentGiven(int i) {
 		if (EqualChallengesGivenDifferentGiven[i] != null) return EqualChallengesGivenDifferentGiven[i];
@@ -124,7 +136,7 @@ public class TMAProtocol extends DBProtocol{
 		return EqualChallengesGivenDifferentGiven[i];
 	}
 
-	BigDecimal[] distanceFraud = new BigDecimal[256];
+	BigDecimal[] distanceFraud = new BigDecimal[257];
 
 	@Override
 	public BigDecimal getDistanceFraudProbability() {
@@ -146,7 +158,7 @@ public class TMAProtocol extends DBProtocol{
 	}
 
 
-	BigDecimal[] FGivenD = new BigDecimal[256];
+	BigDecimal[] FGivenD = new BigDecimal[257];
 
 	
 	private BigDecimal computeFGivenD(int i) {
@@ -214,7 +226,7 @@ public class TMAProtocol extends DBProtocol{
 	private double distanceFraudFromDisk2(int n){
 		if (distances2 == null) {
 			try {
-				fillDistance2(256);
+				fillDistance2(257);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -251,7 +263,7 @@ public class TMAProtocol extends DBProtocol{
 	private BigDecimal mafiaFraudFromDisk2(int n){
 		if (mafia2 == null) {
 			try {
-				fillMafia2(256);
+				fillMafia2(257);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -279,7 +291,13 @@ public class TMAProtocol extends DBProtocol{
 		reader.close();
 	}
 	public static void main(String[] args) throws IOException {
-		generateDataFile();
+		TMAProtocol p = new TMAProtocol();
+		p.setNumberOfRounds(256);
+		BigDecimal mafia = p.getMafiaFraudProbabilityExpensiveMethod();
+		System.out.println("n = "+256+" Mafia = "+mafia.doubleValue());
+		BigDecimal distance = p.distanceFraud(p.getNumberOfRounds(), 0);
+		System.out.println("n = "+256+" Distance = "+distance.doubleValue());
+		//generateDataFile();
 	}
 
 	public String getMafiaFileNameOfValues(){
@@ -294,7 +312,7 @@ public class TMAProtocol extends DBProtocol{
 		TMAProtocol p = new TMAProtocol();
 		FileWriter writerMafia = new FileWriter(new File(p.getMafiaFileNameOfValues()));
 		FileWriter writerDistance = new FileWriter(new File(p.getDistanceFileNameOfValues()));		
-		for (int i = 0; i <= 256; i++){
+		for (int i = 0; i <= 257; i++){
 			p.setNumberOfRounds(i);
 			BigDecimal mafia = p.getMafiaFraudProbability();
 			BigDecimal distance = p.getDistanceFraudProbability();

@@ -48,8 +48,8 @@ public abstract class Evolution {
 	public static void main1(String[] args) throws IOException {
 		System.setOut(new PrintStream("evolution.txt"));
 		System.out.println("Starting");
-		//DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
-		DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
+		DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
+		//DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		protocols = constraintProtocols(protocols);
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
@@ -140,9 +140,11 @@ public abstract class Evolution {
 				BigDecimal mafia = pList[j].getMafiaFraudProbability();
 				BigDecimal distance = pList[j].getDistanceFraudProbability();
 				long memory = pList[j].getMemory();
+				long bitsExchanged = pList[j].getTotalBitsExchangedDuringFastPhase();
 				if (mafia.compareTo(mafiaUpperBound) <= 0 &&
 						distance.compareTo(distanceUpperBound) <= 0 &&
-						memory <= memoryUpperBound){
+						memory <= memoryUpperBound &&
+						bitsExchanged <= DBProtocol.MAX_N*2){
 					tmp.add(pList[j]);//this protocol meets the constraints.
 				}
 			}

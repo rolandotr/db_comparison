@@ -39,7 +39,7 @@ public abstract class DBProtocol implements Serializable{
 	public static final int SIZE_OF_MAC = 128;
 	public static final int SIZE_OF_HASH = 128;
 	
-	public static final int MAX_N = 128;
+	public static final int MAX_N = 256;
 	
 	protected int n;
 	protected int sizeOfSecret = SIZE_OF_SECRET;
