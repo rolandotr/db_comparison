@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import protocols.specifications.DBProtocol;
+import utils.Gnuplot;
 
 import attributes.Attribute;
 import attributes.CryptoCalls;
@@ -26,8 +27,10 @@ import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
 import attributes.TotalBitsExchanged;
 import attributes.relations.BitsExchangedRelation;
+import attributes.relations.DoubleRelation;
 import attributes.relations.FinalSlowPhaseRelation;
 import attributes.relations.IntegerRelation;
+import attributes.relations.LongRelation;
 import attributes.relations.MemoryRelation;
 import attributes.relations.ProbabilityRelation;
 import attributes.relations.SizeOfMessagesRelation;
@@ -48,8 +51,8 @@ public abstract class Evolution {
 	public static void main1(String[] args) throws IOException {
 		System.setOut(new PrintStream("evolution.txt"));
 		System.out.println("Starting");
-		DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
-		//DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
+		//DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
+		DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		protocols = constraintProtocols(protocols);
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
@@ -57,13 +60,18 @@ public abstract class Evolution {
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				//new MafiaFraudProbability(new DoubleRelation(), new LogScale(2)),
 				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				//new DistanceFraudProbability(new DoubleRelation(), new LogScale(2)),
 				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				//new TerroristFraudProbability(new DoubleRelation(), new LogScale(2)),
 				new TotalBitsExchanged(new IntegerRelation(), new NoScale<Integer>()),
 				//new TotalBitsExchanged(new BitsExchangedRelation(), new NoScale<Integer>()),
 				new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
+				//new SizeOfMessages(new IntegerRelation(), new NoScale<Integer>()),
 				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
 				new Memory(new MemoryRelation(), new KbitsScale()),
+				//new Memory(new LongRelation(), new KbitsScale()),
 				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
 		};
 		
@@ -76,12 +84,16 @@ public abstract class Evolution {
 		
 		History.printHistory(protocols, attributes, frontiers);
 		
-		frontiers =  orderFrontierByBitsExchanged(frontiers, attributes);
+		//frontiers =  orderFrontierByBitsExchanged(frontiers, attributes);
 		
 		System.out.println("Printing latex table");
 		
 		History.printLatexTable(frontiers, 0, 1, "evolution_table.tex");
 
+		Gnuplot.createDatafile(frontiers[0].getProtocols(), frontiers[0].getFrontier(), "all");
+		//Gnuplot.createDatafile(frontiers[0].getProtocols(), frontiers[0].getFrontier(), "all_relation");
+		//Gnuplot.createDatafile(frontiers[0].getProtocols(), frontiers[0].getFrontier(), "all_without_relation");
+		
 	}
 	
 	private static ParetoFrontier[] orderFrontierByBitsExchanged(
