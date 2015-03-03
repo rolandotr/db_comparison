@@ -54,7 +54,7 @@ public class History {
 				new YearOfPublication(new IntegerRelation(), new NoScale<Integer>()),
 		};
 		
-		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
+		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes, null);
 		
 		saveInDiskTheFrontiers(frontiers, "history.obj");
 		
@@ -245,6 +245,15 @@ public class History {
 			if (aValue.isEqual(bValue)) {
 				System.out.println("Attribute "+aValue.toString()+" is equal to "+bValue.toString());
 			}
+		}
+		System.out.println("");
+	}
+
+	public static void printInfo(DBProtocol p, Attribute[] attributes) {
+		System.out.println("Protocol: "+p.getIdentifier());
+		for (int i = 0; i < attributes.length; i++) {
+			Attribute aValue = p.getAttribute(attributes[i]); 
+			System.out.println("Attribute is equal to "+aValue.toString());
 		}
 		System.out.println("");
 	}

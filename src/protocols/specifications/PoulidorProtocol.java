@@ -190,7 +190,7 @@ public class PoulidorProtocol extends DBProtocol{
 		return "distance_"+getAcronym()+"_values.DAT";
 	}
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		PoulidorProtocol p = new PoulidorProtocol();
 		p.setNumberOfRounds(256);
 		BigDecimal mafia = p.getMafiaFraudProbability();

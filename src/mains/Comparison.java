@@ -1,13 +1,20 @@
 package mains;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintStream;
+import java.util.List;
+import java.util.TreeMap;
 
 import methodology.Evolution;
 import methodology.History;
+import methodology.InternalState;
 import methodology.ParetoFrontier;
 import protocols.specifications.DBProtocol;
+import utils.Progress;
 import attributes.Attribute;
 import attributes.CryptoCalls;
 import attributes.DistanceFraudProbability;
@@ -28,13 +35,15 @@ import attributes.scales.NoScale;
 
 public class Comparison {
 
-	public static void main(String[] args) throws FileNotFoundException, IOException {
-		System.setOut(new PrintStream("evolution.txt"));
+	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException {
+		int exponent = Integer.parseInt(args[0]);
+		System.setOut(new PrintStream("evolution-"+exponent+".txt"));
 		System.out.println("Starting");
-		DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
-		//DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
+		double mafiaUpperBound = Math.pow(0.5, exponent);
+		//DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
+		DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
-		protocols = Evolution.constraintProtocols(protocols);
+		protocols = Evolution.constraintProtocols(protocols, mafiaUpperBound);
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
@@ -48,11 +57,26 @@ public class Comparison {
 				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
 		};
 		
+		String fileName = "comparison_"+exponent+"_"+DBProtocol.MAX_N+".obj";
+		InternalState state = null;
+		File f = new File(fileName);
+		if (f.exists()){
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
+			state = (InternalState)in.readObject();
+			in.close();
+		}
+		else{
+			state = new InternalState(fileName);
+			state.setIndexesToBeRemoved(new TreeMap<Integer, List<Integer>>());
+			state.setProgress(new Progress(0));
+		}
+		
+		//ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes, state);
 		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
 		
 		System.out.println("Saving on disk");
 		
-		History.saveInDiskTheFrontiers(frontiers, "evolution.obj");
+		History.saveInDiskTheFrontiers(frontiers, "finalResult_"+exponent+".obj");
 		
 		
 		History.printHistory(protocols, attributes, frontiers);

@@ -74,7 +74,7 @@ public class DecisionMaking {
 			}
 			else{
 				System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
-				frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
+				frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes, null);
 			}		
 		}
 		System.out.println("Saving on disk");

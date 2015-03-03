@@ -12,7 +12,7 @@ public class KbitsScale extends LinearScale{
 
 	@Override
 	public String scaleMeaning(Long value) {
-		return value+"Kb";
+		return value+"\\texttt{Kb}";
 	}
 	
 }

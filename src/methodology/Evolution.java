@@ -75,7 +75,8 @@ public abstract class Evolution {
 				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
 		};
 		
-		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
+		
+		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes, null);
 		
 		System.out.println("Saving on disk");
 		
@@ -143,6 +144,7 @@ public abstract class Evolution {
 		for (int i = 0; i < protocols.length; i++) {
 			DBProtocol[] pList = protocols[i];
 			long memoryUpperBound = 8192;//4Kbyte which is 8192 bits.
+			//long memoryUpperBound = Long.MAX_VALUE;//4Kbyte which is 8192 bits.
 			List<DBProtocol> tmp = new LinkedList<>();
 			for (int j = 0; j < pList.length; j++) {
 				//BigDecimal mafiaUpperBound = (new BigDecimal("0.75")).pow(pList[j].getNumberOfRounds());
@@ -157,6 +159,33 @@ public abstract class Evolution {
 						distance.compareTo(distanceUpperBound) <= 0 &&
 						memory <= memoryUpperBound &&
 						bitsExchanged <= DBProtocol.MAX_N*2){
+					tmp.add(pList[j]);//this protocol meets the constraints.
+				}
+			}
+			if (tmp.isEmpty()) continue;
+			DBProtocol[] tmp2 = new DBProtocol[tmp.size()];
+			int pos = 0;
+			for (DBProtocol p : tmp) {
+				tmp2[pos++] = p;
+			}
+			tmpResult.add(tmp2);
+		}
+		DBProtocol[][] result = new DBProtocol[tmpResult.size()][];
+		int pos = 0;
+		for (DBProtocol[] list : tmpResult){
+			result[pos++] = list;
+		}
+		return result;
+	}
+
+	public static DBProtocol[][] constraintProtocols(DBProtocol[][] protocols, double mafiaUpperBound) {
+		List<DBProtocol[]> tmpResult = new LinkedList<>();
+		for (int i = 0; i < protocols.length; i++) {
+			DBProtocol[] pList = protocols[i];
+			List<DBProtocol> tmp = new LinkedList<>();
+			for (int j = 0; j < pList.length; j++) {
+				BigDecimal mafia = pList[j].getMafiaFraudProbability();
+				if (mafia.doubleValue() <= mafiaUpperBound){
 					tmp.add(pList[j]);//this protocol meets the constraints.
 				}
 			}

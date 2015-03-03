@@ -1,7 +1,16 @@
 package utils;
 
-public class Progress {
+import java.io.Serializable;
 
+public final class Progress implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4592743677692574642L;
+	
+	
+	
 	private long total;
 	private long progress;
 	
@@ -22,5 +31,9 @@ public class Progress {
 	
 	public void printProgress(){
 		System.out.println("Progress = " + ((double)progress/total)*100+" %");
+	}
+	
+	public void setTotal(long total){
+		this.total = total;
 	}
 }

@@ -7,6 +7,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
+import methodology.History;
+
 
 import attributes.Attribute;
 import attributes.CryptoCalls;
@@ -21,6 +23,14 @@ import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
 import attributes.TotalBitsExchanged;
 import attributes.YearOfPublication;
+import attributes.relations.FinalSlowPhaseRelation;
+import attributes.relations.IntegerRelation;
+import attributes.relations.MemoryRelation;
+import attributes.relations.ProbabilityRelation;
+import attributes.relations.SizeOfMessagesRelation;
+import attributes.scales.KbitsScale;
+import attributes.scales.LogScale;
+import attributes.scales.NoScale;
 
 public abstract class DBProtocol implements Serializable{
 
@@ -33,17 +43,62 @@ public abstract class DBProtocol implements Serializable{
 	
 	/*Trujillo- Mar 24, 2014
 	 * All this numbers are in bits*/
-	public static final int SIZE_OF_COMMIT = 128;
-	public static final int SIZE_OF_NONCES = 128;
-	public static final int SIZE_OF_SECRET = 128;
-	public static final int SIZE_OF_MAC = 128;
-	public static final int SIZE_OF_HASH = 128;
+	public static final int SIZE_OF_COMMIT = 256;
+	public static final int SIZE_OF_NONCES = 256;
+	public static final int SIZE_OF_SECRET = 256;
+	public static final int SIZE_OF_MAC = 256;
+	public static final int SIZE_OF_HASH = 256;
 	
-	public static final int MAX_N = 32;
+	public static int MAX_N = 256;
 	
 	protected int n;
 	protected int sizeOfSecret = SIZE_OF_SECRET;
 
+	
+	public static void main(String[] args) {
+		KbitsScale scaleMem = new KbitsScale();
+		LogScale scaleProb = new LogScale(2);
+		KimAndAvoineProtocol kim = new KimAndAvoineProtocol(0.85);
+		kim.setNumberOfRounds(37);
+		System.out.println("KIM and Avoine");
+		System.out.println("mafia = "+scaleProb.scale(kim.getMafiaFraudProbability().doubleValue()));
+		System.out.println("distance = "+scaleProb.scale(kim.getDistanceFraudProbability().doubleValue()));
+		System.out.println("terrorist = "+scaleProb.scale(kim.getTerroristFraudProbability().doubleValue()));
+		System.out.println("memory = "+scaleMem.scale(kim.getMemory()));
+		SKIProtocol ski = new SKIProtocol(2, DBProtocol.SIZE_OF_NONCES);
+		ski.setNumberOfRounds(78);
+		System.out.println("SKI");
+		System.out.println("mafia = "+scaleProb.scale(ski.getMafiaFraudProbability().doubleValue()));
+		System.out.println("distance = "+scaleProb.scale(ski.getDistanceFraudProbability().doubleValue()));
+		System.out.println("terrorist = "+scaleProb.scale(ski.getTerroristFraudProbability().doubleValue()));
+		System.out.println("memory = "+scaleMem.scale(ski.getMemory()));
+		
+		System.out.println("Comparing TMA vs Tree");
+		DBProtocol tma = new TMAProtocol();
+		tma.setNumberOfRounds(2);
+		DBProtocol tree = new TreeBasedProtocol(2, DBProtocol.SIZE_OF_NONCES);
+		tree.setNumberOfRounds(2);
+		Attribute[] attributes = new Attribute[]{
+				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new TotalBitsExchanged(new IntegerRelation(), new NoScale<Integer>()),
+				//new TotalBitsExchanged(new BitsExchangedRelation(), new NoScale<Integer>()),
+				new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
+				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
+				new Memory(new MemoryRelation(), new KbitsScale()),
+				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
+		};
+		
+		if (tma.dominate(tree, attributes)){
+			History.printInfoOfDomination(tma, tree, attributes);
+		}
+		else{
+			History.printInfoOfDomination(tree, tma, attributes);
+		}
+
+	}
+	
 	/*Trujillo- May 26, 2014
 	 * Is a kind of clone*/
 	public boolean isSameInstanceRegardlessRounds(DBProtocol p){
@@ -85,7 +140,7 @@ public abstract class DBProtocol implements Serializable{
 	}
 	
 	
-	public final long getMemory(){
+	public long getMemory(){
 		return getTotalMsgSizeReceived()+
 				getTotalOutputSizeOfCallsToFunctions()+
 				SIZE_OF_NONCES*getNumberOfNoncesGenerated()+
