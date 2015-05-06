@@ -8,6 +8,11 @@ public class HanckeAndKuhnProtocol extends DBProtocol{
 	private int sizeOfNonces;
 	private int sizeOfHash = SIZE_OF_HASH;
 	
+	public static void main(String[] args) {
+		HanckeAndKuhnProtocol p = new HanckeAndKuhnProtocol();
+		p.setNumberOfRounds(4);
+		System.out.println(p.getMafiaFraudProbability().doubleValue());
+	}
 	public HanckeAndKuhnProtocol(int sizeOfNonces){
 		this.sizeOfNonces = sizeOfNonces;
 	}

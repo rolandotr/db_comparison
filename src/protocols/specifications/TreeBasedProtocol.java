@@ -9,6 +9,12 @@ public class TreeBasedProtocol extends DBProtocol{
 	private int sizeOfNonces;
 	protected int depth;
 	
+	public static void main(String[] args) {
+		TreeBasedProtocol t = new TreeBasedProtocol();
+		t.setNumberOfRounds(4);
+		System.out.println(t.computeMyFar(4));
+	}
+	
 	public TreeBasedProtocol(int depth, int sizeOfNonces){
 		this.sizeOfNonces = sizeOfNonces;
 		this.depth = depth;
