@@ -11,8 +11,10 @@ public class TreeBasedProtocol extends DBProtocol{
 	
 	public static void main(String[] args) {
 		TreeBasedProtocol t = new TreeBasedProtocol();
-		t.setNumberOfRounds(4);
-		System.out.println(t.computeMyFar(4));
+		for (int i = 1; i <= 256; i++) {
+			t.setNumberOfRounds(i);
+			System.out.println("n = "+i+" => resistance = "+t.computeMyFar(i));
+		}
 	}
 	
 	public TreeBasedProtocol(int depth, int sizeOfNonces){
