@@ -54,7 +54,7 @@ public class History {
 				new YearOfPublication(new IntegerRelation(), new NoScale<Integer>()),
 		};
 		
-		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes, null);
+		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
 		
 		saveInDiskTheFrontiers(frontiers, "history.obj");
 		

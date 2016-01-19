@@ -2,25 +2,18 @@ package utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 import protocols.specifications.BestProtocol;
 import protocols.specifications.BrandsAndChaumProtocol;
 import protocols.specifications.DBProtocol;
-import protocols.specifications.HanckeAndKuhnProtocol;
-import protocols.specifications.MADProtocol;
 import protocols.specifications.MunillaAndPeinadoProtocol;
 import protocols.specifications.PoulidorProtocol;
-import protocols.specifications.RasmussenAndCapckunProtocol;
 import protocols.specifications.SKIProtocol;
 import protocols.specifications.SwissKnifeProtocol;
 import protocols.specifications.TMAProtocol;
 import protocols.specifications.TreeBasedProtocol;
+import protocols.specifications.UniformProtocol;
 
-import methodology.ParetoFrontier;
 
 import attributes.Attribute;
 import attributes.CryptoCalls;
@@ -38,14 +31,13 @@ import attributes.relations.SizeOfMessagesRelation;
 import attributes.scales.KbitsScale;
 import attributes.scales.LogScale;
 import attributes.scales.NoScale;
-import attributes.scales.Scale;
 
 public class SpiderChart {
 
 public static String newLine = System.getProperty("line.separator");
 
 	public static void main(String[] args) throws IOException {
-		main3(args);
+		main4(args);
 	}
 	public static void main1(String[] args) throws IOException {
 		DBProtocol best = new BestProtocol();
@@ -91,6 +83,25 @@ public static String newLine = System.getProperty("line.separator");
 		};
 
 		printSpiderChart(firstSet, attributes, "tree_hk_bc.tex");
+	}
+
+	public static void main4(String[] args) throws IOException {
+		DBProtocol best = new BestProtocol();
+		best.setNumberOfRounds(32);
+		DBProtocol poulidor = new PoulidorProtocol();
+		poulidor.setNumberOfRounds(32);
+		DBProtocol uniform = new UniformProtocol(16);
+		uniform.setNumberOfRounds(32);
+		DBProtocol[] firstSet = new DBProtocol[]{
+				best,poulidor, uniform,
+		};
+		Attribute[] attributes = new Attribute[]{
+				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new Memory(new MemoryRelation(), new KbitsScale()),
+		};
+
+		printSpiderChart(firstSet, attributes, "uniform_against_others.tex");
 	}
 
 	public static void main2(String[] args) throws IOException {

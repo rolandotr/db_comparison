@@ -1,15 +1,10 @@
 package utils;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.FilterWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.Hashtable;
-import java.util.Iterator;
 
-import methodology.ParetoFrontier;
 import protocols.specifications.DBProtocol;
 
 public abstract class Gnuplot {

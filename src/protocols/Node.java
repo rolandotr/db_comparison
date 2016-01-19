@@ -235,7 +235,7 @@ public class Node extends DBProtocol{
 	}
 	public boolean hasBitsExchangedChildren() {
 		if (state.bitsExchangedIndex < bitsExchanged.length-1) return true; 
-		//return false;
+		return false;
 	}
 	public boolean hasSizeOfMessageChildren() {
 		if (state.sizOfMessageIndex < sizeOfMessage.length-1) return true; 
@@ -263,4 +263,3 @@ public class Node extends DBProtocol{
 		return state;
 	}
 }
-

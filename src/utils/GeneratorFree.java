@@ -1,7 +1,6 @@
 package utils;
 
 import java.util.Enumeration;
-import java.util.NoSuchElementException;
 
 public class GeneratorFree implements Enumeration<int[]>{
 

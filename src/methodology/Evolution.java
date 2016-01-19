@@ -6,13 +6,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintStream;
 import java.math.BigDecimal;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import protocols.specifications.DBProtocol;
 import utils.Gnuplot;
@@ -26,11 +22,8 @@ import attributes.Memory;
 import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
 import attributes.TotalBitsExchanged;
-import attributes.relations.BitsExchangedRelation;
-import attributes.relations.DoubleRelation;
 import attributes.relations.FinalSlowPhaseRelation;
 import attributes.relations.IntegerRelation;
-import attributes.relations.LongRelation;
 import attributes.relations.MemoryRelation;
 import attributes.relations.ProbabilityRelation;
 import attributes.relations.SizeOfMessagesRelation;
@@ -44,20 +37,22 @@ import attributes.scales.NoScale;
 public abstract class Evolution {
 	
 	public static void main(String[] args) throws IOException, ClassNotFoundException {
-		main1(args);
+		createComparisonTable(args);
 		//main2(args);
 	}
 	
-	public static void main1(String[] args) throws IOException {
+	public static void createComparisonTable(String[] args) throws IOException {
 		System.setOut(new PrintStream("evolution.txt"));
 		System.out.println("Starting");
 		//DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
 		DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
+		/*Trujillo- Jan 19, 2016
+		 * Next, we constrain the protocols to resist mafia fraud with the following
+		 * upper bound*/
+		protocols = constraintProtocols(protocols, Math.pow(0.5, 1));
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
-		protocols = constraintProtocols(protocols);
-		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
-		//protocols = constraintProtocolsToMafiaAndDistance(protocols, Math.pow(0.5, 16), Math.pow(0.5, 16), 0);
-		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
+		//protocols = constraintProtocols(protocols);
+		//System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
 				//new MafiaFraudProbability(new DoubleRelation(), new LogScale(2)),
@@ -76,7 +71,7 @@ public abstract class Evolution {
 		};
 		
 		
-		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes, null);
+		ParetoFrontier[] frontiers = ParetoFrontier.computeAllParetoFrontiers(protocols, attributes);
 		
 		System.out.println("Saving on disk");
 		

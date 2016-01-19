@@ -290,7 +290,7 @@ public class TMAProtocol extends DBProtocol{
 		}
 		reader.close();
 	}
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		TMAProtocol p = new TMAProtocol();
 		p.setNumberOfRounds(256);
 		BigDecimal mafia = p.getMafiaFraudProbabilityExpensiveMethod();

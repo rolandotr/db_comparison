@@ -2,7 +2,6 @@ package utils;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import protocols.specifications.DBProtocol;

@@ -5,26 +5,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import methodology.Evolution;
-
 import protocols.specifications.DBProtocol;
 
 import attributes.Attribute;
-import attributes.CryptoCalls;
 import attributes.DistanceFraudProbability;
-import attributes.FinalSlowPhase;
 import attributes.MafiaFraudProbability;
-import attributes.Memory;
-import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
-import attributes.relations.FinalSlowPhaseRelation;
-import attributes.relations.IntegerRelation;
-import attributes.relations.MemoryRelation;
 import attributes.relations.ProbabilityRelation;
-import attributes.relations.SizeOfMessagesRelation;
-import attributes.scales.KbitsScale;
 import attributes.scales.LogScale;
-import attributes.scales.NoScale;
 
 public class Data {
 	

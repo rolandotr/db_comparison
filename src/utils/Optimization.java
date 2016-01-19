@@ -2,17 +2,10 @@ package utils;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.io.ObjectOutputStream.PutField;
-import java.math.BigDecimal;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
-import methodology.Evolution;
 import methodology.History;
 import protocols.Node;
 import protocols.State;
@@ -26,7 +19,6 @@ import attributes.MafiaFraudProbability;
 import attributes.Memory;
 import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
-import attributes.TotalBitsExchanged;
 import attributes.relations.FinalSlowPhaseRelation;
 import attributes.relations.IntegerRelation;
 import attributes.relations.MemoryRelation;

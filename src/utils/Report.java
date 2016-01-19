@@ -2,13 +2,10 @@ package utils;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +18,6 @@ import attributes.Memory;
 import attributes.NumberOfRounds;
 import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
-import attributes.TotalBitsExchanged;
 import attributes.relations.FinalSlowPhaseRelation;
 import attributes.relations.IntegerRelation;
 import attributes.relations.MemoryRelation;

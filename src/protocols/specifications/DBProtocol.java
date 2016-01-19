@@ -2,7 +2,6 @@ package protocols.specifications;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
@@ -50,6 +49,7 @@ public abstract class DBProtocol implements Serializable{
 	public static final int SIZE_OF_HASH = 256;
 	
 	public static int MAX_N = 256;
+	//public static int MAX_N = 16;
 	
 	protected int n;
 	protected int sizeOfSecret = SIZE_OF_SECRET;
@@ -289,6 +289,7 @@ public abstract class DBProtocol implements Serializable{
 	 * has the total number of bits sent during the fast phase equal.*/
 	public static DBProtocol[][] loadProtocolsFairly() {
 		DBProtocol[] protocols = loadProtocols();
+		System.out.println("The total number of protocols to be compared is "+protocols.length);
 		TreeMap<Integer, List<DBProtocol>> tmp = new TreeMap<>();
 		for (int i = 0; i < protocols.length; i++) {
 			//System.out.println(protocols[i].getIdentifier());
