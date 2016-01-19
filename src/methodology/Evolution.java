@@ -49,7 +49,7 @@ public abstract class Evolution {
 		/*Trujillo- Jan 19, 2016
 		 * Next, we constrain the protocols to resist mafia fraud with the following
 		 * upper bound*/
-		protocols = constraintProtocols(protocols, Math.pow(0.5, 1));
+		protocols = constraintProtocols(protocols, Math.pow(0.5, 196));
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		//protocols = constraintProtocols(protocols);
 		//System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);

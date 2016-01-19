@@ -35,11 +35,11 @@ A static and public variable called MAX_N can be used for that purpose.
 
 - How can I run the methodology as defined in the paper "Comparing distance bounding protocols: A critical mission supported by decision theory" -
 
-A main method (named createComparisonTable) within the class methodology.History can be used for that purpose. 
+A main method (named createComparisonTable) within the class methodology.Evolution can be used for that purpose. 
 	- This method first uses the static method DBProtocol.loadProtocolsFairly() in order load the set of protocols to be compared. 
 	- Then the method "constraintProtocols" is used to only consider those protocols whose resistance to mafia fraud is upper bounded by given threshold. Note that, in the
 	corresponding scientific article this is used to generate Table 4. The analyst can define as many thresholds as needed.
 	- Next, the set of considered attributes is defined. To understand the notion of approximate equality and scales see the corresponding scientific article.
-	- The method ParetoFrontier.computeAllParetoFrontiers computes the pareto frontiers, while History.printLatexTable provides a latex table with the result. It should be remarked that this is a very basic table, which needs to be refactored in order to look like the one in the paper.
+	- The method ParetoFrontier.computeAllParetoFrontiers computes the pareto frontiers, while Evolution.printLatexTable provides a latex table with the result. It should be remarked that this is a very basic table, which needs to be refactored in order to look like the one in the paper.
 	
 *** Should you have any question, don't hesitate to contact me at rolando.trujillo@uni.lu ****
