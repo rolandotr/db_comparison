@@ -9,7 +9,7 @@ or almost all, DB protocols proposed up-to-date. The flexible design and the met
 DB protocols make it a great tool for distance bounding protocols designers. More information can be 
 obtained from our paper [1].
 
-[1] G. Avoine and R. Trujillo-Rasua. not yet published. 
+[1] Comparing distance bounding protocols: A critical mission supported by decision theory. G. Avoine, S. Mauw and R. Trujillo-Rasua. Computer Communications, 67:92–102, 2015 
 
 Contact address:
 Rolando Trujillo Rasua
