@@ -38,6 +38,7 @@ public static String newLine = System.getProperty("line.separator");
 	public static void main(String[] args) throws IOException {
 		main1(args);
 	}
+	
 	public static void main1(String[] args) throws IOException {
 		DBProtocol best = new BestProtocol();
 		best.setNumberOfRounds(128);
