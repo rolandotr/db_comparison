@@ -12,7 +12,6 @@ import protocols.specifications.SKIProtocol;
 import protocols.specifications.SwissKnifeProtocol;
 import protocols.specifications.TMAProtocol;
 import protocols.specifications.TreeBasedProtocol;
-import protocols.specifications.UniformProtocol;
 
 
 import attributes.Attribute;
@@ -37,7 +36,7 @@ public class SpiderChart {
 public static String newLine = System.getProperty("line.separator");
 
 	public static void main(String[] args) throws IOException {
-		main4(args);
+		main1(args);
 	}
 	public static void main1(String[] args) throws IOException {
 		DBProtocol best = new BestProtocol();
@@ -90,10 +89,8 @@ public static String newLine = System.getProperty("line.separator");
 		best.setNumberOfRounds(32);
 		DBProtocol poulidor = new PoulidorProtocol();
 		poulidor.setNumberOfRounds(32);
-		DBProtocol uniform = new UniformProtocol(16);
-		uniform.setNumberOfRounds(32);
 		DBProtocol[] firstSet = new DBProtocol[]{
-				best,poulidor, uniform,
+				best,poulidor,
 		};
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
