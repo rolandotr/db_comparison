@@ -270,6 +270,12 @@ public abstract class DBProtocol implements Serializable{
 		tmp = new YKHLProtocol().getInstances();
 		length += tmp.length;
 		protocols.add(tmp);
+		
+		//Jorge added Modular Protocol on March 2, 2019 
+		tmp = new ModularProtocol().getInstances();
+		length += tmp.length;
+		protocols.add(tmp);
+		
 		/*tmp = new BestProtocol().getInstances();
 		length += tmp.length;
 		protocols.add(tmp);*/
