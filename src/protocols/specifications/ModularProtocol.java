@@ -267,7 +267,7 @@ public class ModularProtocol extends DBProtocol {
 
 	@Override
 	public DBProtocol[] getInstances() {
-		
+
 		int hs[] = { 16, 32, 64, 128, 256 }, len = hs.length;
 
 		DBProtocol[] result = new DBProtocol[MAX_N * len];
@@ -367,5 +367,78 @@ public class ModularProtocol extends DBProtocol {
 		// System.out.println(poulidor.getMafiaFraudProbability());
 		// System.out.println(BigDecimal.valueOf(.5).pow(32));
 
+		/////////////////
+		// Mafia Fraud //
+		/////////////////
+
+		System.out.println("\n---------------------\n" + "Mafia Fraud");
+
+		String protonames[] = { "TMA", "Poulidor", "Tree", "SKI", "Modular", "SwissKnife", "BC", "KA" };
+		DBProtocol protos[] = { new TMAProtocol(), new PoulidorProtocol(), new TreeBasedProtocol(6, SIZE_OF_NONCES),
+				new SKIProtocol(2, SIZE_OF_NONCES), new ModularProtocol(32), new SwissKnifeProtocol(),
+				new BrandsAndChaumProtocol(), new KimAndAvoineProtocol(.95) };
+
+		DBProtocol protocol = null;
+
+		for (int i = 0; i < protonames.length; i++) {
+			System.out.println("\n\n" + protonames[i]);
+			protocol = protos[i];
+
+			if (!protocol.getAcronym().equals(protonames[i]))
+				System.out.println("[Warning] " + protocol.getAcronym() + " differs from " + protonames[i]);
+
+			for (int n = 10; n < 130; n += 10) {
+				protocol.setNumberOfRounds(n);
+				System.out.println(n + " " + protocol.getMafiaFraudProbability().doubleValue());
+			}
+		}
+
+		////////////////////
+		// Distance Fraud //
+		////////////////////
+
+		System.out.println("\n---------------------\n" + "Distance Fraud");
+
+		for (int i = 0; i < protonames.length; i++) {
+			System.out.println("\n\n" + protonames[i]);
+			protocol = protos[i];
+
+			if (!protocol.getAcronym().equals(protonames[i]))
+				System.out.println("[Warning] " + protocol.getAcronym() + " differs from " + protonames[i]);
+
+			for (int n = 10; n < 130; n += 10) {
+				protocol.setNumberOfRounds(n);
+				System.out.println(n + " " + protocol.getDistanceFraudProbability().doubleValue());
+			}
+		}
+
+		/////////////////////////////
+		// Experiments for Uniform //
+		/////////////////////////////
+
+		protonames = new String[] { "SKI", "Poulidor", "Tree", "TMA", "KA2", "HK", "3-uniform", "MP" };
+		protos = new DBProtocol[] { new SKIProtocol(2, SIZE_OF_NONCES), new PoulidorProtocol(), new TreeBasedProtocol(),
+				new TMAProtocol(), new KimAndAvoineProtocol(.95), new HanckeAndKuhnProtocol(), new ModularProtocol(8),
+				new MunillaAndPeinadoProtocol(0.5) };
+
+		int order[] = { 0, 7, 1, 4, 2, 3, 5, 6 }; // play with the order for more illustrative plot 
+
+		System.out.println("\n---------------------\n" + "Experiments for Uniform");
+		for (int i : order) {
+			System.out.println("\n\n" + protonames[i]);
+			protocol = protos[i];
+
+			if (!protocol.getAcronym().equals(protonames[i]))
+				System.out.println("[Warning] " + protocol.getAcronym() + " differs from " + protonames[i]);
+
+			for (int n = 4; n < 33; n += 4) {
+				protocol.setNumberOfRounds(n);
+				if(protonames[i].equals("Tree")) {
+					System.out.println(n + " " + Math.pow(.5, n)*(n/2+1));
+				}else
+					System.out.println(n + " " + protocol.getMafiaFraudProbability().doubleValue());
+			}
+		}
+		
 	}
 }
