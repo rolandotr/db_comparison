@@ -47,12 +47,10 @@ public abstract class Evolution {
 		//DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
 		DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
 		/*Trujillo- Jan 19, 2016
-		 * Next, we constrain the protocols to resist mafia fraud with the following
+		 * Next, we constrain the protocols to resist mafia and distance fraud with the following
 		 * upper bound*/
-		protocols = constraintProtocols(protocols, Math.pow(0.5, 64), Math.pow(0.5, 64), 2048);
+		protocols = constraintProtocols(protocols, Math.pow(0.5, 32), Math.pow(0.5, 32), 4096);
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
-		//protocols = constraintProtocols(protocols);
-		//System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
 				//new MafiaFraudProbability(new DoubleRelation(), new LogScale(2)),

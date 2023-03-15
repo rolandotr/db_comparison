@@ -55,50 +55,6 @@ public abstract class DBProtocol implements Serializable{
 	protected int sizeOfSecret = SIZE_OF_SECRET;
 
 	
-	public static void main(String[] args) {
-		KbitsScale scaleMem = new KbitsScale();
-		LogScale scaleProb = new LogScale(2);
-		KimAndAvoineProtocol kim = new KimAndAvoineProtocol(0.85);
-		kim.setNumberOfRounds(37);
-		System.out.println("KIM and Avoine");
-		System.out.println("mafia = "+scaleProb.scale(kim.getMafiaFraudProbability().doubleValue()));
-		System.out.println("distance = "+scaleProb.scale(kim.getDistanceFraudProbability().doubleValue()));
-		System.out.println("terrorist = "+scaleProb.scale(kim.getTerroristFraudProbability().doubleValue()));
-		System.out.println("memory = "+scaleMem.scale(kim.getMemory()));
-		SKIProtocol ski = new SKIProtocol(2, DBProtocol.SIZE_OF_NONCES);
-		ski.setNumberOfRounds(78);
-		System.out.println("SKI");
-		System.out.println("mafia = "+scaleProb.scale(ski.getMafiaFraudProbability().doubleValue()));
-		System.out.println("distance = "+scaleProb.scale(ski.getDistanceFraudProbability().doubleValue()));
-		System.out.println("terrorist = "+scaleProb.scale(ski.getTerroristFraudProbability().doubleValue()));
-		System.out.println("memory = "+scaleMem.scale(ski.getMemory()));
-		
-		System.out.println("Comparing TMA vs Tree");
-		DBProtocol tma = new TMAProtocol();
-		tma.setNumberOfRounds(2);
-		DBProtocol tree = new TreeBasedProtocol(2, DBProtocol.SIZE_OF_NONCES);
-		tree.setNumberOfRounds(2);
-		Attribute[] attributes = new Attribute[]{
-				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				new TotalBitsExchanged(new IntegerRelation(), new NoScale<Integer>()),
-				//new TotalBitsExchanged(new BitsExchangedRelation(), new NoScale<Integer>()),
-				new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
-				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
-				new Memory(new MemoryRelation(), new KbitsScale()),
-				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
-		};
-		
-		if (tma.dominate(tree, attributes)){
-			History.printInfoOfDomination(tma, tree, attributes);
-		}
-		else{
-			History.printInfoOfDomination(tree, tma, attributes);
-		}
-
-	}
-	
 	/*Trujillo- May 26, 2014
 	 * Is a kind of clone*/
 	public boolean isSameInstanceRegardlessRounds(DBProtocol p){
@@ -231,57 +187,60 @@ public abstract class DBProtocol implements Serializable{
 	public static DBProtocol[] loadProtocols() {
 		List<DBProtocol[]> protocols = new LinkedList<>();
 		int length = 0;
-		DBProtocol[] tmp = new BrandsAndChaumProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new BussardAndBaggaProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
+		DBProtocol[] tmp;
+//		tmp = new BrandsAndChaumProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new BussardAndBaggaProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
 		tmp = new HanckeAndKuhnProtocol().getInstances();
 		length += tmp.length;
 		protocols.add(tmp);
-		tmp = new KimAndAvoineProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new MADProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new MunillaAndPeinadoProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new PoulidorProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new RasmussenAndCapckunProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new SKIProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new SwissKnifeProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new TMAProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new TreeBasedProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-		tmp = new YKHLProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
+//		tmp = new KimAndAvoineProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+////		tmp = new MADProtocol().getInstances();
+////		length += tmp.length;
+////		protocols.add(tmp);
+//		tmp = new MunillaAndPeinadoProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new PoulidorProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new RasmussenAndCapckunProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new SKIProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new SwissKnifeProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new TMAProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new TreeBasedProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+//		tmp = new YKHLProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+		
+		//Jorge added Modular Protocol on March 2, 2019 
+//		tmp = new ModularProtocol().getInstances();
+//		length += tmp.length;
+//		protocols.add(tmp);
+		
+		//Rolando added the Optimal lookup-based protocol on March 2023
 		tmp = new OptimalLookupBasedProtocol().getInstances();
 		length += tmp.length;
 		protocols.add(tmp);
-		
-		//Jorge added Modular Protocol on March 2, 2019 
-		tmp = new ModularProtocol().getInstances();
+
+		tmp = new BestProtocol().getInstances();
 		length += tmp.length;
 		protocols.add(tmp);
-		
-		/*tmp = new BestProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);*/
 		DBProtocol[] result = new DBProtocol[length];
 		int index = 0;
 		for (DBProtocol[] list : protocols) {

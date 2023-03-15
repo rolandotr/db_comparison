@@ -119,11 +119,11 @@ public class OptimalLookupBasedProtocol extends DBProtocol{
 
 	@Override
 	public DBProtocol[] getInstances() {
-		int x = (int)(Math.log(MAX_N)/Math.log(2));
+		int x = (int)(Math.log(MAX_N)/Math.log(2))+1;
 		OptimalLookupBasedProtocol[] result = new OptimalLookupBasedProtocol[x];
 		int n = 1;
 		int i = 0;
-		while (n < MAX_N) {
+		while (n <= MAX_N) {
 			result[i] = new OptimalLookupBasedProtocol();
 			result[i].setNumberOfRounds(n);
 			n *= 2;

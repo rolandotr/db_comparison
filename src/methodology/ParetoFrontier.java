@@ -97,10 +97,10 @@ public class ParetoFrontier implements Serializable{
 					indexesToBeRemoved.put(j, tmp);
 				}
 				if (protocols[i].dominate(protocols[j], attributes)){
-					/*
+					
 					System.out.println(protocols[i].getIdentifier()+" dominates "+protocols[j].getIdentifier());
 					History.printInfoOfDomination(protocols[i], protocols[j], attributes);
-					*/
+					
 					indexesToBeRemoved.get(j).add(i);
 				}
 			}
