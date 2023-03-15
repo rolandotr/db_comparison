@@ -49,7 +49,7 @@ public abstract class Evolution {
 		/*Trujillo- Jan 19, 2016
 		 * Next, we constrain the protocols to resist mafia fraud with the following
 		 * upper bound*/
-		protocols = constraintProtocols(protocols, Math.pow(0.5, 196));
+		protocols = constraintProtocols(protocols, Math.pow(0.5, 64), Math.pow(0.5, 64), 2048);
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		//protocols = constraintProtocols(protocols);
 		//System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
@@ -173,14 +173,19 @@ public abstract class Evolution {
 		return result;
 	}
 
-	public static DBProtocol[][] constraintProtocols(DBProtocol[][] protocols, double mafiaUpperBound) {
+	public static DBProtocol[][] constraintProtocols(DBProtocol[][] protocols, double mafiaUpperBound, 
+			double distanceUpperBound, 
+			double memory) {
 		List<DBProtocol[]> tmpResult = new LinkedList<>();
 		for (int i = 0; i < protocols.length; i++) {
 			DBProtocol[] pList = protocols[i];
 			List<DBProtocol> tmp = new LinkedList<>();
 			for (int j = 0; j < pList.length; j++) {
 				BigDecimal mafia = pList[j].getMafiaFraudProbability();
-				if (mafia.doubleValue() <= mafiaUpperBound){
+				BigDecimal distance = pList[j].getDistanceFraudProbability();
+				if (mafia.doubleValue() <= mafiaUpperBound && 
+						distance.doubleValue() <= distanceUpperBound && 
+						pList[j].getMemory() <= memory){
 					tmp.add(pList[j]);//this protocol meets the constraints.
 				}
 			}

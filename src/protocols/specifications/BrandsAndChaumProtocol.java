@@ -2,7 +2,6 @@ package protocols.specifications;
 
 import java.math.BigDecimal;
 
-import org.omg.CORBA.TCKind;
 
 import attributes.Attribute;
 import attributes.CryptoCalls;

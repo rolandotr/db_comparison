@@ -40,10 +40,11 @@ public class Comparison {
 		System.setOut(new PrintStream("evolution-"+exponent+".txt"));
 		System.out.println("Starting");
 		double mafiaUpperBound = Math.pow(0.5, exponent);
+		double distanceUpperBound = mafiaUpperBound;
 		//DBProtocol[][] protocols = DBProtocol.loadProtocolsFairly();
 		DBProtocol[][] protocols = new DBProtocol[][]{DBProtocol.loadProtocols()};
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
-		protocols = Evolution.constraintProtocols(protocols, mafiaUpperBound);
+		protocols = Evolution.constraintProtocols(protocols, mafiaUpperBound, distanceUpperBound, 2048);
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),

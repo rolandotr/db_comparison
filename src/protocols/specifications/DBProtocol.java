@@ -48,7 +48,7 @@ public abstract class DBProtocol implements Serializable{
 	public static final int SIZE_OF_MAC = 256;
 	public static final int SIZE_OF_HASH = 256;
 	
-	public static int MAX_N = 256;
+	public static int MAX_N = 128;
 	//public static int MAX_N = 16;
 	
 	protected int n;
@@ -270,6 +270,9 @@ public abstract class DBProtocol implements Serializable{
 		tmp = new YKHLProtocol().getInstances();
 		length += tmp.length;
 		protocols.add(tmp);
+		tmp = new OptimalLookupBasedProtocol().getInstances();
+		length += tmp.length;
+		protocols.add(tmp);
 		
 		//Jorge added Modular Protocol on March 2, 2019 
 		tmp = new ModularProtocol().getInstances();
@@ -347,6 +350,13 @@ public abstract class DBProtocol implements Serializable{
 			if (!a.isEqual(b)) return false;
 		}
 		return true;
+	}
+	
+	public String getMafiaFileNameOfValues(){
+		return "mafia_"+getAcronym()+"_values.DAT";
+	}
+	public String getDistanceFileNameOfValues(){
+		return "distance_"+getAcronym()+"_values.DAT";
 	}
 }
 

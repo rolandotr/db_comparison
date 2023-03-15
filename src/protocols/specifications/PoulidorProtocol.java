@@ -167,7 +167,7 @@ public class PoulidorProtocol extends DBProtocol{
 		PoulidorProtocol p = new PoulidorProtocol();
 		FileWriter writerMafia = new FileWriter(new File(p.getMafiaFileNameOfValues()));
 		FileWriter writerDistance = new FileWriter(new File(p.getDistanceFileNameOfValues()));		
-		for (int i = 0; i <= 257; i++){
+		for (int i = 0; i <= 128; i++){
 			p.setNumberOfRounds(i);
 			BigDecimal mafia = p.getMafiaFraudProbability();
 			BigDecimal distance = p.getDistanceFraudProbability();
@@ -183,12 +183,7 @@ public class PoulidorProtocol extends DBProtocol{
 	}
 	
 	
-	public String getMafiaFileNameOfValues(){
-		return "mafia_"+getAcronym()+"_values.DAT";
-	}
-	public String getDistanceFileNameOfValues(){
-		return "distance_"+getAcronym()+"_values.DAT";
-	}
+
 
 	public static void main(String[] args) {
 		PoulidorProtocol p = new PoulidorProtocol();
