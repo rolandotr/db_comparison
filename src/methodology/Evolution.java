@@ -22,8 +22,10 @@ import attributes.Memory;
 import attributes.SizeOfMessages;
 import attributes.TerroristFraudProbability;
 import attributes.TotalBitsExchanged;
+import attributes.relations.DoubleRelation;
 import attributes.relations.FinalSlowPhaseRelation;
 import attributes.relations.IntegerRelation;
+import attributes.relations.LongRelation;
 import attributes.relations.MemoryRelation;
 import attributes.relations.ProbabilityRelation;
 import attributes.relations.SizeOfMessagesRelation;
@@ -49,22 +51,22 @@ public abstract class Evolution {
 		/*Trujillo- Jan 19, 2016
 		 * Next, we constrain the protocols to resist mafia and distance fraud with the following
 		 * upper bound*/
-		protocols = constraintProtocols(protocols, Math.pow(0.5, 32), Math.pow(0.5, 32), 4096);
+		protocols = constraintProtocols(protocols, Math.pow(0.5, 64), Math.pow(0.5, 64), 1024);
 		System.out.println("Total protocols: "+protocols.length+" and "+protocols[0].length);
 		Attribute[] attributes = new Attribute[]{
-				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				//new MafiaFraudProbability(new DoubleRelation(), new LogScale(2)),
-				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				//new DistanceFraudProbability(new DoubleRelation(), new LogScale(2)),
-				new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				//new TerroristFraudProbability(new DoubleRelation(), new LogScale(2)),
+				//new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new MafiaFraudProbability(new DoubleRelation(), new LogScale(2)),
+				//new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new DistanceFraudProbability(new DoubleRelation(), new LogScale(2)),
+				//new TerroristFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new TerroristFraudProbability(new DoubleRelation(), new LogScale(2)),
 				new TotalBitsExchanged(new IntegerRelation(), new NoScale<Integer>()),
 				//new TotalBitsExchanged(new BitsExchangedRelation(), new NoScale<Integer>()),
-				new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
-				//new SizeOfMessages(new IntegerRelation(), new NoScale<Integer>()),
+				//new SizeOfMessages(new SizeOfMessagesRelation(), new NoScale<Integer>()),
+				new SizeOfMessages(new IntegerRelation(), new NoScale<Integer>()),
 				new CryptoCalls(new IntegerRelation(), new NoScale<Integer>()),
-				new Memory(new MemoryRelation(), new KbitsScale()),
-				//new Memory(new LongRelation(), new KbitsScale()),
+				//new Memory(new MemoryRelation(), new NoScale<Long>()),
+				new Memory(new LongRelation(), new NoScale<Long>()),
 				new FinalSlowPhase(new FinalSlowPhaseRelation(), new NoScale<Boolean>()),
 		};
 		

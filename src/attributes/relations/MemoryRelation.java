@@ -6,7 +6,7 @@ public class MemoryRelation implements ApproximateEquality<Long>{
 
 	@Override
 	public boolean equal(Long x, Long y) {
-		return Math.abs(x-y)<1024;
+		return Math.abs(x-y)<128;
 	}
 
 }
