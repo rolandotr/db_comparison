@@ -100,24 +100,25 @@ public class Data {
 		};
 		String suffix = "";
 		String newLine = System.getProperty("line.separator");
+		String delimiter = "\t";
 		for (Attribute attribute : attributes) {
 			suffix += "-"+attribute.getName();
 		}
 		FileWriter writer = new FileWriter(new File("Data"+suffix+"-increment-"+increment+".DAT"), false);
 		writer.write("# n");
-		writer.append(","+"Protocol");
-		writer.append(","+"Identifier");
+		writer.append(delimiter+"Protocol");
+		writer.append(delimiter+"Identifier");
 		for (Attribute attribute : attributes) {
-			writer.append(","+attribute.getName());
+			writer.append(delimiter+attribute.getName());
 		}
 		writer.append(newLine);
 		for (DBProtocol p : protocols) {
 			
 			writer.append(""+p.getNumberOfRounds());
-			writer.append(","+p.getAcronym());
-			writer.append(","+p.getIdentifier());
+			writer.append(delimiter+p.getAcronym());
+			writer.append(delimiter+p.getIdentifier());
 			for (Attribute attribute : attributes) {
-				writer.append(","+p.getAttribute(attribute).getValue().toString());
+				writer.append(delimiter+p.getAttribute(attribute).getValue().toString());
 			}
 			writer.append(newLine);
 		}
