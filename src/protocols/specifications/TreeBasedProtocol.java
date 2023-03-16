@@ -43,7 +43,7 @@ public class TreeBasedProtocol extends DBProtocol{
 		BigDecimal p1 = p.pow(trees);
 		int remaining = n % depth;
 		BigDecimal p2 = computeMyFar(remaining);
-		if (remaining>1) return p1.multiply(p2);
+		if (remaining>0) return p1.multiply(p2);
 		else return p1;
 	}
 
@@ -78,7 +78,11 @@ public class TreeBasedProtocol extends DBProtocol{
 	@Override
 	public BigDecimal getDistanceFraudProbability() {
 		BigDecimal result = distanceFraudUpperBound(depth);
-		return result.pow(n/depth);
+		int remaining = n % depth;
+		BigDecimal p2 = distanceFraudUpperBound(remaining);
+		BigDecimal p1 = result.pow(n/depth);
+		if (remaining>0) return p1.multiply(p2);
+		return p1;
 	}
 
 	@Override
