@@ -10,8 +10,11 @@ import protocols.specifications.DBProtocol;
 import attributes.Attribute;
 import attributes.DistanceFraudProbability;
 import attributes.MafiaFraudProbability;
+import attributes.Memory;
 import attributes.TerroristFraudProbability;
+import attributes.relations.MemoryRelation;
 import attributes.relations.ProbabilityRelation;
+import attributes.scales.KbitsScale;
 import attributes.scales.LogScale;
 
 public class Data {
@@ -43,7 +46,8 @@ public class Data {
 	}
 
 	public static void main(String[] args) throws IOException {
-		main1(args);
+		//main1(args);
+		printDataAllProtocols(256, 1);
 	}
 	
 	public static void main1(String[] args) throws IOException {
@@ -85,5 +89,36 @@ public class Data {
 				writer.close();
 			}
 		}
+	}
+
+	public static void printDataAllProtocols(int maxN, int increment) throws IOException{
+		DBProtocol[] protocols = DBProtocol.loadProtocols();
+		Attribute[] attributes = new Attribute[]{
+				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
+				new Memory(new MemoryRelation(), new KbitsScale()),
+		};
+		String suffix = "";
+		String newLine = System.getProperty("line.separator");
+		for (Attribute attribute : attributes) {
+			suffix += "-"+attribute.getName();
+		}
+		FileWriter writer = new FileWriter(new File("Data"+suffix+"-increment-"+increment+".DAT"), false);
+		writer.write("# n");
+		writer.append(","+"Protocol");
+		for (Attribute attribute : attributes) {
+			writer.append(","+attribute.getName());
+		}
+		writer.append(newLine);
+		for (DBProtocol p : protocols) {
+			
+			writer.append(""+p.getNumberOfRounds());
+			writer.append(","+p.getAcronym());
+			for (Attribute attribute : attributes) {
+				writer.append(","+p.getAttribute(attribute).getValue().toString());
+			}
+			writer.append(newLine);
+		}
+		writer.close();
 	}
 }
