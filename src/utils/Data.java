@@ -96,7 +96,7 @@ public class Data {
 		Attribute[] attributes = new Attribute[]{
 				new MafiaFraudProbability(new ProbabilityRelation(), new LogScale(2)),
 				new DistanceFraudProbability(new ProbabilityRelation(), new LogScale(2)),
-				new Memory(new MemoryRelation(), new KbitsScale()),
+				new Memory(new MemoryRelation(), new KbitsScale())
 		};
 		String suffix = "";
 		String newLine = System.getProperty("line.separator");
@@ -106,6 +106,7 @@ public class Data {
 		FileWriter writer = new FileWriter(new File("Data"+suffix+"-increment-"+increment+".DAT"), false);
 		writer.write("# n");
 		writer.append(","+"Protocol");
+		writer.append(","+"Identifier");
 		for (Attribute attribute : attributes) {
 			writer.append(","+attribute.getName());
 		}
@@ -114,6 +115,7 @@ public class Data {
 			
 			writer.append(""+p.getNumberOfRounds());
 			writer.append(","+p.getAcronym());
+			writer.append(","+p.getIdentifier());
 			for (Attribute attribute : attributes) {
 				writer.append(","+p.getAttribute(attribute).getValue().toString());
 			}

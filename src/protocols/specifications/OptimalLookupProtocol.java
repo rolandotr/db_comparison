@@ -78,10 +78,10 @@ public class OptimalLookupProtocol extends DBProtocol{
 
 	@Override
 	public DBProtocol[] getInstances() {
-		OptimalLookupProtocol[] result = new OptimalLookupProtocol[MAX_N*(32-2+1)];
+		OptimalLookupProtocol[] result = new OptimalLookupProtocol[MAX_N*32];
 		for (int i = 0; i < MAX_N; i++){
-			for (int depth = 2; depth <= 32; depth++) {
-				int index = i*(32-2+1) + depth-2; 
+			for (int depth = 1; depth <= 32; depth++) {
+				int index = i*32 + depth-1; 
 				result[index] = new OptimalLookupProtocol();
 				result[index].setNumberOfRounds(i+1);
 				result[index].depth = depth;

@@ -99,10 +99,10 @@ public class TreeBasedProtocol extends DBProtocol{
 
 	@Override
 	public DBProtocol[] getInstances() {
-		TreeBasedProtocol[] result = new TreeBasedProtocol[MAX_N*(32-2+1)];
+		TreeBasedProtocol[] result = new TreeBasedProtocol[MAX_N*32];
 		for (int i = 0; i < MAX_N; i++){
-			for (int depth = 2; depth <= 32; depth++) {
-				int index = i*(32-2+1) + depth-2; 
+			for (int depth = 1; depth <= 32; depth++) {
+				int index = i*32 + depth-1; 
 				result[index] = new TreeBasedProtocol();
 				result[index].setNumberOfRounds(i+1);
 				result[index].depth = depth;
