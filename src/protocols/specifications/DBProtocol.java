@@ -234,13 +234,13 @@ public abstract class DBProtocol implements Serializable{
 		protocols.add(tmp);
 		
 		//Rolando added the Optimal lookup-based protocol on March 2023
-		tmp = new OptimalLookupProtocol().getInstances();
-		length += tmp.length;
-		protocols.add(tmp);
-
-//		tmp = new BestProtocol().getInstances();
+//		tmp = new OptimalLookupProtocol().getInstances();
 //		length += tmp.length;
 //		protocols.add(tmp);
+
+		tmp = new BestProtocol().getInstances();
+		length += tmp.length;
+		protocols.add(tmp);
 		DBProtocol[] result = new DBProtocol[length];
 		int index = 0;
 		for (DBProtocol[] list : protocols) {
